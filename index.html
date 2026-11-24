@@ -1,0 +1,2680 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hành Trình Khám Phá Tri Thức - Ngữ Văn THCS Tích Hợp AI</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Be Vietnam Pro & Merriweather -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Be Vietnam Pro"', 'sans-serif'],
+            serif: ['"Merriweather"', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Nền chuyển sắc tím - xanh dương - xanh lá dịu mắt cho học sinh THCS */
+    body {
+      background: linear-gradient(135deg, #f5f3ff 0%, #eff6ff 50%, #ecfdf5 100%);
+      color: #1e293b;
+      min-height: 100vh;
+    }
+
+    .gradient-primary {
+      background: linear-gradient(135deg, #6366f1 0%, #0ea5e9 55%, #10b981 100%);
+    }
+
+    .gradient-soft {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(14, 165, 233, 0.08) 50%, rgba(16, 185, 129, 0.08) 100%);
+    }
+
+    .text-gradient {
+      background: linear-gradient(135deg, #4f46e5 0%, #0284c7 50%, #059669 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Nút bấm bo tròn nổi khối và phản hồi mượt khi hover / active */
+    .btn-pill {
+      border-radius: 9999px;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .btn-pill:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px -6px rgba(79, 70, 229, 0.28);
+    }
+    .btn-pill:active:not(:disabled) {
+      transform: translateY(1px) scale(0.98);
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .tab-section {
+      display: none;
+      animation: fadeSlideUp 0.3s ease-out forwards;
+    }
+    .tab-section.active {
+      display: block;
+    }
+
+    @keyframes fadeSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .literary-text {
+      font-family: 'Merriweather', serif;
+      line-height: 1.9;
+    }
+
+    .typing-dot {
+      animation: typingBounce 1.4s infinite ease-in-out both;
+    }
+    .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+    .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+    @keyframes typingBounce {
+      0%, 80%, 100% { transform: scale(0); }
+      40% { transform: scale(1); }
+    }
+
+    @media print {
+      header, #toast-container, .no-print {
+        display: none !important;
+      }
+      body {
+        background: #ffffff !important;
+      }
+      .tab-section {
+        display: none !important;
+      }
+      #section-teacher {
+        display: block !important;
+      }
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-indigo-200 selection:text-indigo-900">
+
+  <!-- KHUNG THÔNG BÁO NỔI (TOAST) -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
+
+  <!-- MODAL XEM CHI TIẾT TÀI LIỆU THƯ VIỆN -->
+  <div id="library-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-3xl max-w-3xl w-full max-h-[88vh] flex flex-col shadow-2xl border border-indigo-100 overflow-hidden">
+      <div class="gradient-primary p-6 text-white flex items-start justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider bg-white/20 w-fit px-3 py-1 rounded-full mb-2">
+            <span id="modal-grade-badge">Lớp 6</span>
+            <span>•</span>
+            <span id="modal-category-badge">Văn bản đọc hiểu</span>
+          </div>
+          <h3 id="modal-title" class="text-xl sm:text-2xl font-bold leading-snug">Tiêu đề</h3>
+          <p id="modal-author" class="text-indigo-100 text-sm mt-1">Tác giả</p>
+        </div>
+        <button onclick="closeLibraryModal()" class="btn-pill w-10 h-10 bg-white/20 hover:bg-white/30 flex items-center justify-center text-white shrink-0" aria-label="Đóng">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      <div id="modal-content" class="p-6 sm:p-8 overflow-y-auto space-y-5 text-slate-700 leading-relaxed"></div>
+      <div class="p-4 bg-slate-50 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+        <button onclick="askTutorFromLibrary()" class="btn-pill px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold flex items-center gap-2">
+          <i class="fa-solid fa-robot"></i> Hỏi Gia sư AI về bài này
+        </button>
+        <button onclick="closeLibraryModal()" class="btn-pill px-5 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 text-sm font-bold">
+          Đóng cửa sổ
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL CẤU HÌNH NHANH GEMINI API & FIREBASE FIRESTORE -->
+  <div id="config-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/55 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-indigo-100 overflow-hidden">
+      <div class="gradient-primary p-5 text-white flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-white/20 flex items-center justify-center text-lg">
+            <i class="fa-solid fa-sliders"></i>
+          </div>
+          <div>
+            <h3 class="text-lg font-extrabold">Thiết Lập Gemini AI & Lưu Trữ Đám Mây Lâu Dài</h3>
+            <p class="text-xs text-indigo-100">Dùng chung cho nhiều năm học và đồng bộ dữ liệu trên mọi thiết bị</p>
+          </div>
+        </div>
+        <button onclick="closeConfigModal()" class="btn-pill w-9 h-9 bg-white/20 hover:bg-white/30 flex items-center justify-center text-white" aria-label="Đóng">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="p-6 overflow-y-auto space-y-5 text-sm">
+        <!-- 1. Gemini API Key -->
+        <div class="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-100 space-y-2">
+          <label for="cfg-gemini-key" class="block font-extrabold text-indigo-950">
+            1. Khóa Gemini API Key (cho Gia sư AI, AI Chấm bài & Gợi ý sáng tạo)
+          </label>
+          <p class="text-xs text-slate-600">
+            Lấy miễn phí tại Google AI Studio. Nếu để trống, hệ thống tự động chạy chế độ luyện tập mẫu thông minh để bạn thao tác thử ngay.
+          </p>
+          <input id="cfg-gemini-key" type="password" placeholder="Dán khóa bắt đầu bằng AIza... (tùy chọn)" class="w-full px-4 py-2.5 rounded-2xl bg-white border border-indigo-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+        </div>
+
+        <!-- 2. Năm học & Cấu hình Firebase Firestore -->
+        <div class="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <label for="cfg-school-year" class="font-extrabold text-emerald-950">
+              2. Năm học & Cấu hình Firebase Firestore (Lưu vĩnh viễn qua các năm)
+            </label>
+            <input id="cfg-school-year" type="text" value="2026-2027" placeholder="VD: 2026-2027" class="px-3 py-1.5 rounded-full bg-white border border-emerald-300 text-xs font-bold text-emerald-900 w-32 text-center" />
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Dán đối tượng <code class="bg-white px-1.5 py-0.5 rounded border text-indigo-700">firebaseConfig</code> từ Firebase Console để mọi ngữ liệu, bài tập, đề luyện viết giáo viên đưa lên được lưu vĩnh viễn trên đám mây cho học sinh năm sau dùng tiếp. Khi chưa dán, website tự động lưu cục bộ an toàn trên trình duyệt.
+          </p>
+          <textarea id="cfg-firebase-json" rows="5" placeholder='{
+  "apiKey": "...",
+  "authDomain": "your-project.firebaseapp.com",
+  "projectId": "your-project-id",
+  "storageBucket": "your-project.appspot.com",
+  "messagingSenderId": "...",
+  "appId": "..."
+}' class="w-full p-3.5 rounded-2xl bg-white border border-emerald-200 font-mono text-xs focus:outline-none focus:ring-2 focus:ring-emerald-400"></textarea>
+          <div class="flex items-center justify-between text-xs">
+            <span id="cloud-status-text" class="font-bold text-slate-600">
+              <i class="fa-solid fa-hard-drive text-sky-600 mr-1"></i> Chế độ hiện tại: Lưu trữ trình duyệt (localStorage)
+            </span>
+            <button type="button" onclick="clearCloudConfig()" class="text-rose-600 hover:underline font-semibold">
+              Xóa cấu hình đám mây
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-end gap-3">
+        <button onclick="closeConfigModal()" class="btn-pill px-5 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs sm:text-sm font-bold">
+          Hủy
+        </button>
+        <button onclick="saveRuntimeConfig()" class="btn-pill px-6 py-2.5 gradient-primary text-white text-xs sm:text-sm font-bold shadow-md flex items-center gap-2">
+          <i class="fa-solid fa-check"></i> Lưu & Kết nối ngay
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- THANH ĐIỀU HƯỚNG PHÍA TRÊN -->
+  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-indigo-100 shadow-xs">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6">
+      <!-- Hàng trên: Logo, Khối lớp, Cấu hình AI/Cloud, Điểm, Vai trò -->
+      <div class="flex items-center justify-between py-2.5 gap-2 border-b border-slate-100">
+        <button onclick="switchTab('home')" class="flex items-center gap-2.5 text-left group focus:outline-none">
+          <div class="w-10 h-10 rounded-2xl gradient-primary flex items-center justify-center text-white shadow-md group-hover:scale-105 transition shrink-0">
+            <!-- Minh họa SVG Sách mở & Ngôi sao -->
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+              <path d="M12 3l1.2 2.4L16 6.6l-2 1.9.5 2.7L12 9.9l-2.5 1.3.5-2.7-2-1.9 2.8-1.2L12 3z" fill="currentColor" stroke="none"></path>
+            </svg>
+          </div>
+          <div>
+            <span class="font-extrabold text-sm sm:text-lg tracking-tight text-gradient block leading-tight">Hành Trình Khám Phá Tri Thức</span>
+            <span class="text-[11px] text-slate-500 font-medium hidden sm:block">Ngữ Văn THCS • Kết Nối Tri Thức • Năm học <strong id="header-school-year">2026-2027</strong></span>
+          </div>
+        </button>
+
+        <div class="flex items-center gap-1.5 sm:gap-2.5">
+          <!-- Bộ chọn Khối lớp 6, 7, 8, 9 -->
+          <div class="flex items-center bg-indigo-50/90 p-1 rounded-full border border-indigo-100">
+            <span class="text-xs font-bold text-indigo-700 pl-2 pr-1 hidden lg:inline">Khối:</span>
+            <button onclick="setGrade(6)" data-grade-btn="6" class="btn-pill grade-btn px-2 sm:px-3 py-1 text-xs font-bold">6</button>
+            <button onclick="setGrade(7)" data-grade-btn="7" class="btn-pill grade-btn px-2 sm:px-3 py-1 text-xs font-bold">7</button>
+            <button onclick="setGrade(8)" data-grade-btn="8" class="btn-pill grade-btn px-2 sm:px-3 py-1 text-xs font-bold">8</button>
+            <button onclick="setGrade(9)" data-grade-btn="9" class="btn-pill grade-btn px-2 sm:px-3 py-1 text-xs font-bold">9</button>
+          </div>
+
+          <!-- Nút mở cấu hình AI & Cloud -->
+          <button onclick="openConfigModal()" class="btn-pill px-3 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 text-xs font-bold flex items-center gap-1.5" title="Cấu hình Gemini API & Firebase Firestore">
+            <i class="fa-solid fa-sliders"></i>
+            <span class="hidden md:inline">AI & Lưu trữ</span>
+          </button>
+
+          <!-- Điểm số nhanh -->
+          <button onclick="switchTab('achievements')" class="btn-pill hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-xs font-bold">
+            <i class="fa-solid fa-star text-amber-400"></i>
+            <span id="nav-points">0</span>đ
+          </button>
+
+          <!-- Chuyển vai trò Học sinh / Giáo viên -->
+          <button id="role-toggle-btn" onclick="toggleRole()" class="btn-pill px-3 py-1.5 text-xs font-bold flex items-center gap-1.5 bg-slate-800 hover:bg-slate-900 text-white shadow-xs">
+            <i id="role-icon" class="fa-solid fa-user-graduate text-sky-300"></i>
+            <span id="role-label" class="hidden sm:inline">Học sinh</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Menu điều hướng 10 khu vực chức năng -->
+      <nav aria-label="10 khu vực chức năng" class="flex items-center gap-1.5 py-2 overflow-x-auto no-scrollbar">
+        <button onclick="switchTab('home')" data-tab="home" class="btn-pill nav-tab shrink-0 px-3.5 py-1.5 text-xs sm:text-sm font-semibold flex items-center gap-1.5">
+          <i class="fa-solid fa-compass"></i> <span>1. Hành trình</span>
+        </button>
+        <button onclick="switchTab('library')" data-tab="library" class="btn-pill nav-tab shrink-0 px-3.5 py-1.5 text-xs sm:text-sm font-semibold flex items-center gap-1.5">
+          <i class="fa-solid fa-book-open"></i> <span>2. Thư viện</span>
+        </button>
+        <button onclick="switchTab('tutor')" data-tab="tutor" class="btn-pill nav-tab shrink-0 px-3.5 py-1.5 text-xs sm:text-sm font-semibold flex items-center gap-1.5">
+          <i class="fa-solid fa-robot"></i> <span>3. Gia sư AI</span>
+        </button>
+        <button onclick="switchTab('reading')" data-tab="reading" class="btn-pill nav-tab shrink-0 px-3.5 py-1.5 text-xs sm:text-sm font-semibold flex items-center gap-1.5">
+          <i class="fa-solid fa-magnifying-glass-chart"></i> <span>4. Đọc hiểu</span>
+        </button>
+        <button onclick="switchTab('writing')" data-tab="writing" class="btn-pill nav-tab shrink-0 px-3.5 py-1.5 text-xs sm:text-sm font-semibold flex items-center gap-1.5">
+          <i class="fa-solid fa-feather-pointed"></i> <span>5. Xưởng viết</span>
+        </button>
+        <button onclick="switchTab('evaluator')" data-tab="evaluator" class="btn-pill nav-tab shrink-0 px-3.5 py-1.5 text-xs sm:text-sm font-semibold flex items-center gap-1.5">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> <span>6. AI Chấm bài</span>
+        </button>
+        <button onclick="switchTab('arena')" data-tab="arena" class="btn-pill nav-tab shrink-0 px-3.5 py-1.5 text-xs sm:text-sm font-semibold flex items-center gap-1.5">
+          <i class="fa-solid fa-trophy"></i> <span>7. Đấu trường</span>
+        </button>
+        <button onclick="switchTab('creative')" data-tab="creative" class="btn-pill nav-tab shrink-0 px-3.5 py-1.5 text-xs sm:text-sm font-semibold flex items-center gap-1.5">
+          <i class="fa-solid fa-palette"></i> <span>8. Sáng tạo</span>
+        </button>
+        <button onclick="switchTab('achievements')" data-tab="achievements" class="btn-pill nav-tab shrink-0 px-3.5 py-1.5 text-xs sm:text-sm font-semibold flex items-center gap-1.5">
+          <i class="fa-solid fa-medal"></i> <span>9. Thành tích</span>
+        </button>
+        <button onclick="switchTab('teacher')" data-tab="teacher" class="btn-pill nav-tab shrink-0 px-3.5 py-1.5 text-xs sm:text-sm font-semibold flex items-center gap-1.5">
+          <i class="fa-solid fa-chalkboard-user"></i> <span>10. Góc Giáo viên</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- NỘI DUNG CHÍNH 10 KHU VỰC -->
+  <main class="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-8">
+
+    <!-- ===================================================================== -->
+    <!-- 1. HÀNH TRÌNH KHÁM PHÁ                                               -->
+    <!-- ===================================================================== -->
+    <section id="section-home" class="tab-section active space-y-8">
+      <div class="relative overflow-hidden rounded-3xl gradient-primary p-6 sm:p-10 text-white shadow-xl">
+        <div class="absolute -right-14 -top-14 w-64 h-64 rounded-full bg-white/10 blur-2xl pointer-events-none"></div>
+        <div class="absolute left-1/3 -bottom-16 w-72 h-72 rounded-full bg-emerald-300/20 blur-2xl pointer-events-none"></div>
+
+        <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div class="lg:col-span-7 space-y-4">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/20 backdrop-blur-xs text-xs sm:text-sm font-bold">
+              <i class="fa-solid fa-sparkles text-amber-300"></i>
+              <span>Chương trình Ngữ Văn THCS • Đang chọn: <strong id="home-grade-label">Lớp 6</strong></span>
+            </div>
+            <h1 class="text-2xl sm:text-4xl lg:text-5xl font-extrabold leading-tight">
+              Hành Trình Khám Phá Tri Thức
+            </h1>
+            <p class="text-indigo-50 text-sm sm:text-base leading-relaxed max-w-2xl">
+              Không gian học tập Ngữ văn tương tác dành cho học sinh THCS (Lớp 6, 7, 8, 9), gắn kết giữa đọc hiểu, viết văn, sáng tạo văn học, đánh giá bằng AI và kho học liệu lưu giữ lâu dài qua nhiều năm học.
+            </p>
+            <div class="pt-2 flex flex-wrap gap-3">
+              <button onclick="switchTab('evaluator')" class="btn-pill px-6 py-3 bg-white text-indigo-700 font-bold text-sm shadow-lg flex items-center gap-2">
+                <i class="fa-solid fa-wand-magic-sparkles text-indigo-600"></i> Chấm bài viết với AI
+              </button>
+              <button onclick="switchTab('reading')" class="btn-pill px-6 py-3 bg-slate-900/35 hover:bg-slate-900/50 border border-white/30 text-white font-bold text-sm flex items-center gap-2">
+                <i class="fa-solid fa-book-open-reader"></i> Luyện đọc hiểu ngay
+              </button>
+            </div>
+          </div>
+
+          <!-- Minh họa SVG: Thư viện, Sách, Bút lông, Trang văn & Nhân vật văn học -->
+          <div class="lg:col-span-5 flex justify-center">
+            <div class="bg-white/15 backdrop-blur-md border border-white/25 rounded-3xl p-4 sm:p-5 w-full max-w-sm shadow-inner">
+              <svg viewBox="0 0 340 240" class="w-full h-auto" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Khung thư viện cách điệu -->
+                <rect x="35" y="24" width="270" height="192" rx="20" fill="#FFFFFF" fill-opacity="0.16" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="2"/>
+                <!-- Kệ sách trên -->
+                <line x1="58" y1="74" x2="282" y2="74" stroke="#E0E7FF" stroke-width="3" stroke-linecap="round"/>
+                <rect x="68" y="42" width="16" height="30" rx="3" fill="#FDE047"/>
+                <rect x="88" y="47" width="14" height="25" rx="3" fill="#6EE7B7"/>
+                <rect x="106" y="39" width="18" height="33" rx="3" fill="#93C5FD"/>
+                <rect x="128" y="45" width="15" height="27" rx="3" fill="#F9A8D4"/>
+                <!-- Nhân vật học sinh & nhà văn đọc sách bên trái -->
+                <circle cx="96" cy="112" r="14" fill="#FDE68A"/>
+                <path d="M84 108 C86 96 106 96 108 108 C102 104 90 104 84 108 Z" fill="#312E81"/>
+                <circle cx="92" cy="113" r="1.5" fill="#1E293B"/>
+                <circle cx="101" cy="113" r="1.5" fill="#1E293B"/>
+                <path d="M93 118 Q96.5 121 100 118" stroke="#9F1239" stroke-width="1.6" stroke-linecap="round"/>
+                <path d="M78 152 C78 134 114 134 114 152 Z" fill="#38BDF8"/>
+                <!-- Trang văn & Sách mở trung tâm -->
+                <path d="M170 176 C148 165 125 165 106 173 L106 122 C125 114 148 114 170 125 Z" fill="#FFFFFF"/>
+                <path d="M170 176 C192 165 215 165 234 173 L234 122 C215 114 192 114 170 125 Z" fill="#F8FAFC"/>
+                <line x1="170" y1="125" x2="170" y2="176" stroke="#CBD5E1" stroke-width="2.5"/>
+                <path d="M120 135 H155 M120 146 H155 M120 157 H145" stroke="#94A3B8" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M185 135 H220 M185 146 H220 M185 157 H210" stroke="#34D399" stroke-width="2.5" stroke-linecap="round"/>
+                <!-- Bút lông viết văn bên phải -->
+                <path d="M236 138 C258 104 282 82 302 74 C294 102 276 126 244 144 Z" fill="#FDE047"/>
+                <path d="M232 146 L288 88" stroke="#B45309" stroke-width="2.4" stroke-linecap="round"/>
+                <!-- Ngôi sao & ánh sáng tri thức -->
+                <path d="M254 44 L256.5 50.5 L263.5 53 L256.5 55.5 L254 62 L251.5 55.5 L244.5 53 L251.5 50.5 Z" fill="#FDE047"/>
+                <circle cx="218" cy="48" r="4" fill="#A7F3D0"/>
+                <text x="170" y="203" text-anchor="middle" fill="#FFFFFF" font-size="11" font-weight="700">Đọc sâu • Viết hay • Sáng tạo không giới hạn</text>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 thẻ thống kê nhanh -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white rounded-3xl p-5 border border-indigo-100 shadow-xs flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xl shrink-0">
+            <i class="fa-solid fa-star"></i>
+          </div>
+          <div>
+            <p class="text-xs text-slate-500 font-semibold">Điểm tri thức</p>
+            <p id="home-stat-points" class="text-2xl font-extrabold text-slate-800">0</p>
+          </div>
+        </div>
+        <div class="bg-white rounded-3xl p-5 border border-sky-100 shadow-xs flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center text-xl shrink-0">
+            <i class="fa-solid fa-book-reader"></i>
+          </div>
+          <div>
+            <p class="text-xs text-slate-500 font-semibold">Bài đọc hiểu</p>
+            <p id="home-stat-readings" class="text-2xl font-extrabold text-slate-800">0</p>
+          </div>
+        </div>
+        <div class="bg-white rounded-3xl p-5 border border-emerald-100 shadow-xs flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl shrink-0">
+            <i class="fa-solid fa-pen-nib"></i>
+          </div>
+          <div>
+            <p class="text-xs text-slate-500 font-semibold">Bài văn chấm AI</p>
+            <p id="home-stat-essays" class="text-2xl font-extrabold text-slate-800">0</p>
+          </div>
+        </div>
+        <div class="bg-white rounded-3xl p-5 border border-purple-100 shadow-xs flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center text-xl shrink-0">
+            <i class="fa-solid fa-award"></i>
+          </div>
+          <div>
+            <p class="text-xs text-slate-500 font-semibold">Danh hiệu</p>
+            <p id="home-stat-rank" class="text-sm sm:text-base font-extrabold text-indigo-700 truncate">Người gieo chữ</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lộ trình 4 chặng -->
+      <div class="space-y-4">
+        <div>
+          <h2 class="text-xl sm:text-2xl font-extrabold text-slate-800">Lộ Trình 4 Chặng Khám Phá</h2>
+          <p class="text-sm text-slate-500">Hành trình phát triển năng lực Ngữ văn từ tiếp nhận, tạo lập văn bản đến tư duy phản biện và sáng tạo</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div class="bg-white rounded-3xl p-6 border border-indigo-100 shadow-xs flex flex-col justify-between space-y-4">
+            <div class="space-y-2.5">
+              <span class="px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-extrabold">Chặng 1 • ĐỌC</span>
+              <h3 class="text-lg font-extrabold text-slate-800">Thư Viện & Đọc Hiểu</h3>
+              <p class="text-sm text-slate-600">Khám phá ngữ liệu, kiến thức Tiếng Việt, thể loại và luyện câu hỏi 3 mức độ: Nhận biết – Thông hiểu – Vận dụng.</p>
+            </div>
+            <div class="flex gap-2">
+              <button onclick="switchTab('library')" class="btn-pill flex-1 py-2.5 px-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold">Thư viện</button>
+              <button onclick="switchTab('reading')" class="btn-pill flex-1 py-2.5 px-3 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold">Đọc hiểu</button>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-3xl p-6 border border-sky-100 shadow-xs flex flex-col justify-between space-y-4">
+            <div class="space-y-2.5">
+              <span class="px-3 py-1 rounded-full bg-sky-50 text-sky-700 text-xs font-extrabold">Chặng 2 • VIẾT</span>
+              <h3 class="text-lg font-extrabold text-slate-800">Xưởng Viết & AI Chấm</h3>
+              <p class="text-sm text-slate-600">Luyện viết đoạn, bài tự sự, miêu tả, biểu cảm, nghị luận với dàn ý tham khảo và chấm điểm theo 4 tiêu chí Rubric.</p>
+            </div>
+            <div class="flex gap-2">
+              <button onclick="switchTab('writing')" class="btn-pill flex-1 py-2.5 px-3 bg-sky-50 hover:bg-sky-100 text-sky-700 text-xs font-bold">Xưởng viết</button>
+              <button onclick="switchTab('evaluator')" class="btn-pill flex-1 py-2.5 px-3 bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold">AI Chấm bài</button>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-3xl p-6 border border-emerald-100 shadow-xs flex flex-col justify-between space-y-4">
+            <div class="space-y-2.5">
+              <span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-extrabold">Chặng 3 • TƯ DUY</span>
+              <h3 class="text-lg font-extrabold text-slate-800">Gia Sư & Đấu Trường</h3>
+              <p class="text-sm text-slate-600">Gia sư AI gợi mở tìm ý – lập dàn ý (không làm bài hộ) kết hợp trò chơi trắc nghiệm tốc độ 15 giây/câu.</p>
+            </div>
+            <div class="flex gap-2">
+              <button onclick="switchTab('tutor')" class="btn-pill flex-1 py-2.5 px-3 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold">Gia sư AI</button>
+              <button onclick="switchTab('arena')" class="btn-pill flex-1 py-2.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold">Đấu trường</button>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-3xl p-6 border border-purple-100 shadow-xs flex flex-col justify-between space-y-4">
+            <div class="space-y-2.5">
+              <span class="px-3 py-1 rounded-full bg-purple-50 text-purple-700 text-xs font-extrabold">Chặng 4 • SÁNG TẠO</span>
+              <h3 class="text-lg font-extrabold text-slate-800">Sáng Tạo & Thành Tích</h3>
+              <p class="text-sm text-slate-600">Sáng tác thơ, viết tiếp cái kết, nhật ký nhân vật, lưu Góc tác phẩm và theo dõi tiến bộ qua từng chặng.</p>
+            </div>
+            <div class="flex gap-2">
+              <button onclick="switchTab('creative')" class="btn-pill flex-1 py-2.5 px-3 bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold">Sáng tạo</button>
+              <button onclick="switchTab('achievements')" class="btn-pill flex-1 py-2.5 px-3 bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold">Thành tích</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 2. THƯ VIỆN NGỮ VĂN                                                 -->
+    <!-- ===================================================================== -->
+    <section id="section-library" class="tab-section space-y-6">
+      <div class="bg-white rounded-3xl p-6 sm:p-8 border border-indigo-100 shadow-xs space-y-5">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-slate-100">
+          <div>
+            <span class="px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold">Khu vực 02 • Thư viện học liệu</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-800 mt-1.5">Thư Viện Ngữ Văn (<span class="grade-sync text-indigo-600">Lớp 6</span>)</h2>
+            <p class="text-sm text-slate-500">Kiến thức Tiếng Việt, văn bản đọc hiểu, tác giả – tác phẩm và đặc trưng thể loại</p>
+          </div>
+          <div class="relative w-full md:w-80">
+            <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+            <input id="library-search" type="text" oninput="renderLibrary()" placeholder="Tìm tên bài, tác giả, biện pháp tu từ..." class="w-full pl-10 pr-4 py-2.5 rounded-full bg-slate-50 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white" />
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <button onclick="setLibraryCategory('all')" data-lib-cat="all" class="btn-pill lib-cat-btn px-4 py-2 text-xs font-bold bg-indigo-600 text-white">Tất cả</button>
+          <button onclick="setLibraryCategory('Tiếng Việt')" data-lib-cat="Tiếng Việt" class="btn-pill lib-cat-btn px-4 py-2 text-xs font-bold bg-slate-100 text-slate-600 hover:bg-indigo-50">Tiếng Việt</button>
+          <button onclick="setLibraryCategory('Văn bản đọc hiểu')" data-lib-cat="Văn bản đọc hiểu" class="btn-pill lib-cat-btn px-4 py-2 text-xs font-bold bg-slate-100 text-slate-600 hover:bg-indigo-50">Văn bản đọc hiểu</button>
+          <button onclick="setLibraryCategory('Tác giả - Tác phẩm')" data-lib-cat="Tác giả - Tác phẩm" class="btn-pill lib-cat-btn px-4 py-2 text-xs font-bold bg-slate-100 text-slate-600 hover:bg-indigo-50">Tác giả - Tác phẩm</button>
+          <button onclick="setLibraryCategory('Thể loại')" data-lib-cat="Thể loại" class="btn-pill lib-cat-btn px-4 py-2 text-xs font-bold bg-slate-100 text-slate-600 hover:bg-indigo-50">Thể loại</button>
+          <label class="ml-auto flex items-center gap-2 text-xs font-semibold text-slate-600 cursor-pointer">
+            <input type="checkbox" id="library-all-grades" onchange="renderLibrary()" class="rounded text-indigo-600">
+            <span>Xem cả 4 khối (6–9)</span>
+          </label>
+        </div>
+      </div>
+
+      <div id="library-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 3. GIA SƯ AI                                                          -->
+    <!-- ===================================================================== -->
+    <section id="section-tutor" class="tab-section">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-4 space-y-5">
+          <div class="bg-white rounded-3xl p-6 border border-indigo-100 shadow-xs space-y-4">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-2xl gradient-primary flex items-center justify-center text-white text-xl shadow-md">
+                <i class="fa-solid fa-robot"></i>
+              </div>
+              <div>
+                <span class="text-xs font-bold text-emerald-600 uppercase">Trợ lý Sư phạm AI</span>
+                <h2 class="text-xl font-extrabold text-slate-800">Gia Sư Ngữ Văn</h2>
+              </div>
+            </div>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Giải đáp kiến thức Ngữ văn <strong class="grade-sync text-indigo-600">Lớp 6</strong>, giải thích khái niệm, hướng dẫn tìm ý và lập dàn ý từng bước.
+            </p>
+            <div class="p-3.5 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-950 space-y-1">
+              <p class="font-bold"><i class="fa-solid fa-shield-halved text-amber-600 mr-1"></i> Nguyên tắc gợi mở:</p>
+              <p>Gia sư AI <strong>không viết bài hộ</strong> mà đặt câu hỏi gợi mở, gợi ý luận điểm và từ khóa để em tự sáng tạo.</p>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-3xl p-6 border border-sky-100 shadow-xs space-y-3">
+            <h3 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+              <i class="fa-solid fa-lightbulb text-amber-400"></i> Câu hỏi gợi ý (<span class="grade-sync text-indigo-600">Lớp 6</span>)
+            </h3>
+            <div id="tutor-quick-prompts" class="space-y-2"></div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-8 bg-white rounded-3xl border border-indigo-100 shadow-xs flex flex-col h-[600px] overflow-hidden">
+          <div class="px-6 py-4 gradient-soft border-b border-indigo-100 flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-700">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+              <span id="tutor-mode-label">Gia sư AI • Chế độ gợi mở tương tác</span>
+            </div>
+            <button onclick="clearTutorChat()" class="text-xs font-semibold text-slate-500 hover:text-rose-600 flex items-center gap-1">
+              <i class="fa-solid fa-rotate-right"></i> Làm mới
+            </button>
+          </div>
+
+          <div id="tutor-messages" class="flex-1 p-5 sm:p-6 overflow-y-auto space-y-4 bg-slate-50/40"></div>
+
+          <form onsubmit="handleTutorSubmit(event)" class="p-4 bg-white border-t border-slate-100 flex items-center gap-2.5">
+            <input id="tutor-input" type="text" placeholder="Hỏi cách lập dàn ý, tìm ý, giải thích biện pháp tu từ..." class="flex-1 px-4 py-3 rounded-full bg-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white" required />
+            <button id="tutor-send-btn" type="submit" class="btn-pill px-5 py-3 gradient-primary text-white text-sm font-bold flex items-center gap-2 shrink-0">
+              <span>Gửi</span>
+              <i class="fa-solid fa-paper-plane"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 4. PHÒNG LUYỆN ĐỌC HIỂU                                             -->
+    <!-- ===================================================================== -->
+    <section id="section-reading" class="tab-section space-y-6">
+      <div class="bg-white rounded-3xl p-6 border border-indigo-100 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <span class="px-3 py-1 rounded-full bg-sky-50 text-sky-700 text-xs font-bold">Khu vực 04 • Đọc hiểu văn bản</span>
+          <h2 class="text-2xl font-extrabold text-slate-800 mt-1.5">Phòng Luyện Đọc Hiểu (<span class="grade-sync text-indigo-600">Lớp 6</span>)</h2>
+          <p class="text-sm text-slate-500">Câu hỏi phân hóa 3 mức độ: Nhận biết – Thông hiểu – Vận dụng, chấm điểm và giải thích chi tiết</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <label for="reading-select" class="text-xs font-bold text-slate-600 shrink-0">Chọn ngữ liệu:</label>
+          <select id="reading-select" onchange="loadReadingExercise()" class="px-4 py-2.5 rounded-full bg-indigo-50 border border-indigo-200 text-sm font-semibold text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-400 max-w-xs"></select>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-6 bg-white rounded-3xl p-6 sm:p-8 border border-indigo-100 shadow-xs space-y-4 h-fit lg:sticky lg:top-32">
+          <div class="flex items-center justify-between">
+            <span id="reading-genre-badge" class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold">Thể loại</span>
+            <span class="text-xs text-slate-400 font-medium">Ngữ liệu đọc hiểu</span>
+          </div>
+          <h3 id="reading-title" class="text-xl font-bold text-slate-800">Tên văn bản</h3>
+          <div id="reading-passage" class="literary-text text-sm sm:text-base text-slate-700 bg-amber-50/40 p-5 rounded-2xl border border-amber-100 whitespace-pre-line"></div>
+          <p id="reading-source" class="text-xs italic text-slate-500 text-right">Nguồn trích dẫn</p>
+        </div>
+
+        <div class="lg:col-span-6 space-y-5">
+          <div id="reading-questions-container" class="space-y-4"></div>
+
+          <div class="bg-white rounded-3xl p-5 border border-indigo-100 shadow-xs flex flex-wrap items-center justify-between gap-3">
+            <button onclick="submitReadingAnswers()" class="btn-pill px-6 py-3 gradient-primary text-white text-sm font-bold flex items-center gap-2">
+              <i class="fa-solid fa-check-double"></i> Chấm điểm & Xem giải thích
+            </button>
+            <button onclick="loadReadingExercise()" class="btn-pill px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold">
+              Làm lại
+            </button>
+          </div>
+
+          <div id="reading-result-box" class="hidden bg-gradient-to-br from-indigo-50 via-sky-50 to-emerald-50 rounded-3xl p-6 border border-indigo-200 space-y-2">
+            <div class="flex items-center justify-between">
+              <h4 class="text-lg font-extrabold text-indigo-950">Kết Quả Đọc Hiểu</h4>
+              <span id="reading-score-badge" class="px-4 py-1.5 rounded-full bg-indigo-600 text-white text-sm font-extrabold">0/10</span>
+            </div>
+            <p id="reading-feedback-text" class="text-sm text-slate-700"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 5. XƯỞNG VIẾT VĂN                                                   -->
+    <!-- ===================================================================== -->
+    <section id="section-writing" class="tab-section space-y-6">
+      <div class="bg-white rounded-3xl p-6 border border-indigo-100 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold">Khu vực 05 • Tạo lập văn bản</span>
+          <h2 class="text-2xl font-extrabold text-slate-800 mt-1.5">Xưởng Viết Văn (<span class="grade-sync text-indigo-600">Lớp 6</span>)</h2>
+          <p class="text-sm text-slate-500">Luyện viết đoạn và bài tự sự, miêu tả, biểu cảm, nghị luận kèm dàn ý tham khảo bên cạnh</p>
+        </div>
+
+        <!-- Đồng hồ bấm giờ -->
+        <div class="flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-full border border-slate-200">
+          <i class="fa-regular fa-clock text-indigo-600"></i>
+          <span id="writing-timer" class="font-mono font-bold text-sm text-slate-700">00:00</span>
+          <button onclick="toggleWritingTimer()" id="writing-timer-btn" class="btn-pill px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold">Bắt đầu</button>
+          <button onclick="resetWritingTimer()" class="btn-pill px-2.5 py-1 bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold" title="Đặt lại">
+            <i class="fa-solid fa-rotate-left"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-5 space-y-5">
+          <div class="bg-white rounded-3xl p-6 border border-indigo-100 shadow-xs space-y-4">
+            <label for="writing-prompt-select" class="block text-xs font-extrabold uppercase tracking-wider text-indigo-600">Chọn đề luyện viết</label>
+            <select id="writing-prompt-select" onchange="selectWritingPrompt()" class="w-full px-4 py-3 rounded-2xl bg-indigo-50/70 border border-indigo-200 text-sm font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-400"></select>
+
+            <div class="p-4 rounded-2xl gradient-soft border border-indigo-100 space-y-2">
+              <div class="flex items-center justify-between">
+                <span id="writing-type-badge" class="px-2.5 py-0.5 rounded-full bg-white text-indigo-700 text-xs font-bold">Kiểu bài</span>
+                <span id="writing-target-words" class="text-xs font-semibold text-slate-500">~300 chữ</span>
+              </div>
+              <p id="writing-prompt-text" class="text-sm font-bold text-slate-800 leading-relaxed"></p>
+            </div>
+          </div>
+
+          <!-- Khung dàn ý tham khảo bên cạnh -->
+          <div class="bg-white rounded-3xl p-6 border border-emerald-100 shadow-xs space-y-3">
+            <h3 class="text-sm font-extrabold text-emerald-800 flex items-center gap-2">
+              <i class="fa-solid fa-list-check text-emerald-600"></i> Khung Dàn Ý Tham Khảo
+            </h3>
+            <div id="writing-outline-box" class="space-y-2.5 text-xs sm:text-sm text-slate-700"></div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7 bg-white rounded-3xl p-6 border border-indigo-100 shadow-xs flex flex-col justify-between space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <span class="text-sm font-bold text-slate-700 flex items-center gap-2">
+              <i class="fa-solid fa-pen-fancy text-indigo-600"></i> Không gian viết bài
+            </span>
+            <div class="flex items-center gap-3 text-xs font-semibold text-slate-500">
+              <span>Số từ: <strong id="writing-word-count" class="text-indigo-600">0</strong></span>
+              <span>•</span>
+              <span>Số câu: <strong id="writing-sentence-count" class="text-emerald-600">0</strong></span>
+            </div>
+          </div>
+
+          <textarea id="writing-editor" oninput="updateWritingStats()" rows="14" placeholder="Viết đoạn văn hoặc bài văn của em tại đây..." class="w-full p-4 rounded-2xl bg-amber-50/25 border border-slate-200 literary-text text-sm sm:text-base text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white"></textarea>
+
+          <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+            <div class="flex gap-2">
+              <button onclick="saveWritingDraft()" class="btn-pill px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold flex items-center gap-1.5">
+                <i class="fa-solid fa-floppy-disk"></i> Lưu nháp
+              </button>
+              <button onclick="clearWritingEditor()" class="btn-pill px-4 py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold">
+                Xóa trắng
+              </button>
+            </div>
+            <button onclick="sendWritingToEvaluator()" class="btn-pill px-6 py-3 gradient-primary text-white text-sm font-bold shadow-md flex items-center gap-2">
+              <i class="fa-solid fa-wand-magic-sparkles"></i> Chuyển sang AI Chấm điểm
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 6. AI ĐÁNH GIÁ BÀI VIẾT                                              -->
+    <!-- ===================================================================== -->
+    <section id="section-evaluator" class="tab-section space-y-6">
+      <div class="rounded-3xl gradient-primary p-6 sm:p-8 text-white shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="space-y-1.5">
+          <span class="px-3 py-1 rounded-full bg-white/20 text-xs font-bold uppercase">Khu vực 06 • Trọng tâm AI</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold">AI Đánh Giá Bài Viết Ngữ Văn</h2>
+          <p class="text-sm text-indigo-100 max-w-2xl">
+            Nhập bài viết hoặc tải tệp (.txt, .md) để AI chấm điểm thang 10 theo 4 tiêu chí Rubric Ngữ văn THCS, phân tích ưu điểm, lỗi cần sửa và gợi ý câu văn nâng cấp.
+          </p>
+        </div>
+        <div class="bg-white/15 backdrop-blur-xs px-4 py-3 rounded-2xl border border-white/25 text-xs space-y-1 shrink-0">
+          <p class="font-bold"><i class="fa-solid fa-check-to-slot text-amber-300 mr-1"></i> Rubric 4 tiêu chí (10đ):</p>
+          <p>• Đáp ứng yêu cầu đề & nội dung (3.5đ)</p>
+          <p>• Bố cục & mạch lập luận (2.5đ)</p>
+          <p>• Dùng từ, câu & biện pháp tu từ (2.5đ)</p>
+          <p>• Cảm xúc & sáng tạo (1.5đ)</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-6 bg-white rounded-3xl p-6 border border-indigo-100 shadow-xs space-y-4">
+          <div class="flex items-center justify-between gap-2">
+            <h3 class="text-base font-extrabold text-slate-800">Bài làm của học sinh</h3>
+            <label class="btn-pill cursor-pointer px-3.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold flex items-center gap-1.5">
+              <i class="fa-solid fa-file-arrow-up"></i> Tải tệp bài làm
+              <input type="file" id="evaluator-file-input" accept=".txt,.md,.csv" onchange="handleEvaluatorFileUpload(event)" class="hidden" />
+            </label>
+          </div>
+
+          <div>
+            <label for="evaluator-topic" class="block text-xs font-bold text-slate-600 mb-1">Đề bài:</label>
+            <input id="evaluator-topic" type="text" placeholder="Nhập đề bài văn hoặc đoạn văn..." class="w-full px-4 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white" />
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <label for="evaluator-content" class="text-xs font-bold text-slate-600">Nội dung bài viết:</label>
+              <button type="button" onclick="fillSampleEssay()" class="text-xs font-bold text-indigo-600 hover:underline">
+                <i class="fa-solid fa-sparkles"></i> Nạp bài mẫu thử nghiệm
+              </button>
+            </div>
+            <textarea id="evaluator-content" rows="12" placeholder="Nhập hoặc dán bài viết của em vào đây..." class="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 literary-text text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white"></textarea>
+          </div>
+
+          <button id="evaluate-submit-btn" onclick="evaluateEssayWithAI()" class="btn-pill w-full py-3.5 gradient-primary text-white text-sm font-extrabold shadow-md flex items-center justify-center gap-2">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Đánh Giá & Chấm Điểm Bài Viết
+          </button>
+        </div>
+
+        <div class="lg:col-span-6">
+          <div id="evaluator-placeholder" class="bg-white rounded-3xl p-8 border border-dashed border-indigo-200 h-full flex flex-col items-center justify-center text-center space-y-3">
+            <div class="w-16 h-16 rounded-3xl bg-indigo-50 text-indigo-500 flex items-center justify-center text-3xl">
+              <i class="fa-solid fa-file-pen"></i>
+            </div>
+            <h4 class="text-lg font-bold text-slate-800">Chờ bài viết của em</h4>
+            <p class="text-sm text-slate-500 max-w-sm">
+              Gửi bài viết để nhận điểm số theo 4 tiêu chí, ưu điểm, điểm cần sửa và gợi ý câu văn giàu hình ảnh hơn.
+            </p>
+          </div>
+
+          <div id="evaluator-loading" class="hidden bg-white rounded-3xl p-8 border border-indigo-100 h-full flex flex-col items-center justify-center text-center space-y-3">
+            <div class="w-14 h-14 rounded-full gradient-primary flex items-center justify-center text-white text-2xl animate-spin">
+              <i class="fa-solid fa-sparkles"></i>
+            </div>
+            <h4 class="text-base font-bold text-indigo-900">AI đang phân tích bài viết...</h4>
+          </div>
+
+          <div id="evaluator-result" class="hidden bg-white rounded-3xl p-6 sm:p-7 border border-indigo-100 shadow-xs space-y-5">
+            <div class="flex items-center justify-between p-4 rounded-2xl gradient-soft border border-indigo-100">
+              <div>
+                <span class="text-xs font-bold uppercase text-indigo-600">Kết quả chấm AI</span>
+                <h4 id="eval-rank-label" class="text-lg font-extrabold text-slate-800 mt-0.5">Xếp loại: Tốt</h4>
+              </div>
+              <div class="text-center bg-white px-5 py-2 rounded-2xl border border-indigo-100 shadow-2xs">
+                <span id="eval-total-score" class="text-3xl font-extrabold text-gradient">8.5</span>
+                <span class="text-xs font-bold text-slate-400 block">/ 10</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 text-xs">
+              <div class="p-3 rounded-2xl bg-slate-50 border border-slate-100">
+                <div class="flex justify-between font-bold text-slate-600 mb-1">
+                  <span>1. Yêu cầu & Nội dung</span>
+                  <span id="eval-c1" class="text-indigo-600">0/3.5</span>
+                </div>
+                <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+                  <div id="eval-b1" class="h-full bg-indigo-500 rounded-full" style="width: 0%"></div>
+                </div>
+              </div>
+              <div class="p-3 rounded-2xl bg-slate-50 border border-slate-100">
+                <div class="flex justify-between font-bold text-slate-600 mb-1">
+                  <span>2. Bố cục & Lập luận</span>
+                  <span id="eval-c2" class="text-sky-600">0/2.5</span>
+                </div>
+                <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+                  <div id="eval-b2" class="h-full bg-sky-500 rounded-full" style="width: 0%"></div>
+                </div>
+              </div>
+              <div class="p-3 rounded-2xl bg-slate-50 border border-slate-100">
+                <div class="flex justify-between font-bold text-slate-600 mb-1">
+                  <span>3. Ngôn ngữ & Tu từ</span>
+                  <span id="eval-c3" class="text-emerald-600">0/2.5</span>
+                </div>
+                <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+                  <div id="eval-b3" class="h-full bg-emerald-500 rounded-full" style="width: 0%"></div>
+                </div>
+              </div>
+              <div class="p-3 rounded-2xl bg-slate-50 border border-slate-100">
+                <div class="flex justify-between font-bold text-slate-600 mb-1">
+                  <span>4. Cảm xúc & Sáng tạo</span>
+                  <span id="eval-c4" class="text-purple-600">0/1.5</span>
+                </div>
+                <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+                  <div id="eval-b4" class="h-full bg-purple-500 rounded-full" style="width: 0%"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200 space-y-1.5">
+              <h5 class="text-xs font-extrabold uppercase text-emerald-800"><i class="fa-solid fa-circle-check mr-1"></i> Ưu điểm</h5>
+              <ul id="eval-strengths" class="text-xs sm:text-sm text-slate-700 list-disc pl-5 space-y-1"></ul>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-1.5">
+              <h5 class="text-xs font-extrabold uppercase text-amber-800"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Lỗi cần sửa</h5>
+              <ul id="eval-improvements" class="text-xs sm:text-sm text-slate-700 list-disc pl-5 space-y-1"></ul>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-200 space-y-1.5">
+              <h5 class="text-xs font-extrabold uppercase text-indigo-800"><i class="fa-solid fa-sparkles mr-1"></i> Gợi ý nâng cấp câu văn hay hơn</h5>
+              <p id="eval-upgrade" class="text-xs sm:text-sm text-slate-700 leading-relaxed"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 7. ĐẤU TRƯỜNG TRI THỨC                                              -->
+    <!-- ===================================================================== -->
+    <section id="section-arena" class="tab-section">
+      <div class="max-w-3xl mx-auto bg-white rounded-3xl p-6 sm:p-8 border border-indigo-100 shadow-md">
+        <div id="arena-start-screen" class="text-center space-y-6 py-4">
+          <div class="w-20 h-20 mx-auto rounded-3xl gradient-primary flex items-center justify-center text-white text-4xl shadow-lg">
+            <i class="fa-solid fa-trophy"></i>
+          </div>
+          <div class="space-y-2">
+            <span class="px-3.5 py-1 rounded-full bg-purple-50 text-purple-700 text-xs font-bold">Khu vực 07 • Trò chơi trắc nghiệm</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-800">Đấu Trường Tri Thức (<span class="grade-sync text-indigo-600">Lớp 6</span>)</h2>
+            <p class="text-sm text-slate-600 max-w-lg mx-auto">
+              Trắc nghiệm tốc độ 15 giây/câu về kiến thức Ngữ văn, tiếng Việt, tác giả, tác phẩm và biện pháp tu từ. Trả lời đúng liên tiếp để tăng chuỗi Combo!
+            </p>
+          </div>
+          <button onclick="startArenaGame()" class="btn-pill px-8 py-3.5 gradient-primary text-white text-base font-extrabold shadow-lg">
+            Bắt Đầu Tranh Tài
+          </button>
+        </div>
+
+        <div id="arena-play-screen" class="hidden space-y-6">
+          <div class="flex items-center justify-between gap-2 pb-4 border-b border-slate-100">
+            <div class="flex items-center gap-2.5">
+              <span class="px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs font-extrabold">Câu <span id="arena-q-index">1</span>/8</span>
+              <span class="px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-extrabold"><i class="fa-solid fa-fire"></i> Combo x<span id="arena-combo">0</span></span>
+            </div>
+            <div class="flex items-center gap-4">
+              <span class="text-xs font-bold text-slate-600">Điểm: <strong id="arena-score" class="text-base text-emerald-600">0</strong></span>
+              <span id="arena-timer" class="w-10 h-10 rounded-full border-2 border-indigo-500 flex items-center justify-center font-extrabold text-sm text-indigo-700">15</span>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <span id="arena-category-tag" class="text-xs font-bold text-sky-600 uppercase">Chuyên mục</span>
+            <h3 id="arena-question-text" class="text-lg sm:text-xl font-bold text-slate-800">Câu hỏi</h3>
+            <div id="arena-options" class="grid grid-cols-1 gap-3"></div>
+          </div>
+
+          <div id="arena-feedback-banner" class="hidden p-4 rounded-2xl text-sm font-bold"></div>
+        </div>
+
+        <div id="arena-end-screen" class="hidden text-center space-y-6 py-4">
+          <div class="w-20 h-20 mx-auto rounded-full bg-amber-100 text-amber-500 flex items-center justify-center text-4xl">
+            <i class="fa-solid fa-crown"></i>
+          </div>
+          <div class="space-y-1">
+            <h3 class="text-2xl font-extrabold text-slate-800">Hoàn Thành Đấu Trường!</h3>
+            <p id="arena-summary-text" class="text-sm text-slate-600"></p>
+          </div>
+          <div class="grid grid-cols-3 gap-3 max-w-md mx-auto">
+            <div class="p-3 rounded-2xl bg-indigo-50">
+              <p class="text-xs text-slate-500">Điểm</p>
+              <p id="arena-final-score" class="text-xl font-extrabold text-indigo-700">0</p>
+            </div>
+            <div class="p-3 rounded-2xl bg-emerald-50">
+              <p class="text-xs text-slate-500">Đúng</p>
+              <p id="arena-final-correct" class="text-xl font-extrabold text-emerald-700">0/8</p>
+            </div>
+            <div class="p-3 rounded-2xl bg-amber-50">
+              <p class="text-xs text-slate-500">Combo max</p>
+              <p id="arena-final-combo" class="text-xl font-extrabold text-amber-700">x0</p>
+            </div>
+          </div>
+          <div class="flex justify-center gap-3">
+            <button onclick="startArenaGame()" class="btn-pill px-6 py-3 gradient-primary text-white text-sm font-bold">Chơi lại</button>
+            <button onclick="switchTab('achievements')" class="btn-pill px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-bold">Xem Thành tích</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 8. THỬ THÁCH SÁNG TẠO                                               -->
+    <!-- ===================================================================== -->
+    <section id="section-creative" class="tab-section space-y-6">
+      <div class="bg-white rounded-3xl p-6 border border-indigo-100 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <span class="px-3 py-1 rounded-full bg-purple-50 text-purple-700 text-xs font-bold">Khu vực 08 • Sáng tác văn học</span>
+          <h2 class="text-2xl font-extrabold text-slate-800 mt-1.5">Thử Thách Sáng Tạo</h2>
+          <p class="text-sm text-slate-500">Sáng tác thơ, viết tiếp cái kết, nhật ký nhân vật và lưu giữ tại Góc tác phẩm của em</p>
+        </div>
+        <button onclick="pickRandomCreativeChallenge()" class="btn-pill px-5 py-2.5 gradient-primary text-white text-xs sm:text-sm font-bold flex items-center gap-2 shrink-0">
+          <i class="fa-solid fa-shuffle"></i> Đổi thử thách
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-7 space-y-5">
+          <div class="rounded-3xl gradient-soft p-6 border border-purple-200 space-y-2.5">
+            <span id="creative-tag" class="px-3 py-1 rounded-full bg-purple-600 text-white text-xs font-bold">Sáng tác thơ</span>
+            <h3 id="creative-title" class="text-lg sm:text-xl font-extrabold text-slate-800">Tiêu đề thử thách</h3>
+            <p id="creative-desc" class="text-sm text-slate-700 leading-relaxed">Mô tả thử thách</p>
+          </div>
+
+          <div class="bg-white rounded-3xl p-6 border border-indigo-100 shadow-xs space-y-4">
+            <input id="creative-work-title" type="text" placeholder="Nhan đề tác phẩm của em..." class="w-full px-4 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-purple-400 focus:bg-white" />
+            <textarea id="creative-work-body" rows="8" placeholder="Viết bài thơ, đoạn kết mới hoặc nhật ký nhân vật của em..." class="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 literary-text text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:bg-white"></textarea>
+            <div class="flex flex-wrap gap-3">
+              <button onclick="saveCreativeWork()" class="btn-pill px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold flex items-center gap-2">
+                <i class="fa-solid fa-bookmark"></i> Lưu vào Góc tác phẩm
+              </button>
+              <button id="creative-ai-btn" onclick="getCreativeFeedbackAI()" class="btn-pill px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold flex items-center gap-2">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Phản hồi khích lệ từ AI
+              </button>
+            </div>
+            <div id="creative-ai-feedback" class="hidden p-4 rounded-2xl bg-indigo-50 border border-indigo-200 text-sm text-slate-700 leading-relaxed"></div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 bg-white rounded-3xl p-6 border border-indigo-100 shadow-xs space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <h3 class="text-base font-extrabold text-slate-800"><i class="fa-solid fa-book-bookmark text-purple-600 mr-1.5"></i> Góc Tác Phẩm Của Em</h3>
+            <span id="creative-count-badge" class="px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-700 text-xs font-bold">0 tác phẩm</span>
+          </div>
+          <div id="creative-gallery" class="space-y-3 max-h-[450px] overflow-y-auto pr-1"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 9. BẢNG THÀNH TÍCH                                                  -->
+    <!-- ===================================================================== -->
+    <section id="section-achievements" class="tab-section space-y-6">
+      <div class="bg-white rounded-3xl p-6 sm:p-8 border border-indigo-100 shadow-xs">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div class="flex items-center gap-4">
+            <div class="w-16 h-16 rounded-3xl gradient-primary flex items-center justify-center text-white text-3xl shadow-md shrink-0">
+              <i class="fa-solid fa-medal"></i>
+            </div>
+            <div>
+              <span class="px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold">Khu vực 09 • Hồ sơ học tập</span>
+              <h2 class="text-2xl font-extrabold text-slate-800 mt-1">Bảng Thành Tích</h2>
+              <p class="text-sm text-slate-600">Danh hiệu: <strong id="ach-rank-name" class="text-indigo-600">Người gieo chữ</strong> • Tổng điểm: <strong id="ach-total-points" class="text-emerald-600">0</strong></p>
+            </div>
+          </div>
+
+          <div class="w-full md:w-72 bg-slate-50 p-4 rounded-2xl border border-slate-200/80 space-y-2">
+            <div class="flex justify-between text-xs font-bold">
+              <span class="text-slate-600">Tiến độ thăng hạng</span>
+              <span id="ach-next-rank-label" class="text-indigo-600">0 / 100</span>
+            </div>
+            <div class="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden">
+              <div id="ach-rank-bar" class="h-full gradient-primary rounded-full transition-all duration-500" style="width: 10%"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 pt-6 border-t border-slate-100 text-center">
+          <div class="p-4 rounded-2xl bg-indigo-50/60">
+            <p class="text-xs text-slate-500 font-semibold">Bài đọc hiểu</p>
+            <p id="ach-readings-count" class="text-2xl font-extrabold text-indigo-700 mt-1">0</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-sky-50/60">
+            <p class="text-xs text-slate-500 font-semibold">Bài văn chấm AI</p>
+            <p id="ach-essays-count" class="text-2xl font-extrabold text-sky-700 mt-1">0</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-emerald-50/60">
+            <p class="text-xs text-slate-500 font-semibold">Lượt đấu trường</p>
+            <p id="ach-arena-count" class="text-2xl font-extrabold text-emerald-700 mt-1">0</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-purple-50/60">
+            <p class="text-xs text-slate-500 font-semibold">Tác phẩm sáng tạo</p>
+            <p id="ach-creative-count" class="text-2xl font-extrabold text-purple-700 mt-1">0</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-6 bg-white rounded-3xl p-6 border border-indigo-100 shadow-xs space-y-4">
+          <h3 class="text-base font-extrabold text-slate-800"><i class="fa-solid fa-chart-column text-indigo-600 mr-1.5"></i> Biểu Đồ Tiến Bộ Điểm Số</h3>
+          <div id="ach-chart-container" class="h-56 flex items-end justify-around gap-3 p-4 rounded-2xl bg-slate-50 border border-slate-100"></div>
+        </div>
+
+        <div class="lg:col-span-6 bg-white rounded-3xl p-6 border border-indigo-100 shadow-xs space-y-4">
+          <h3 class="text-base font-extrabold text-slate-800"><i class="fa-solid fa-award text-amber-500 mr-1.5"></i> Huy Hiệu Mở Khóa Tự Động</h3>
+          <div id="ach-badges-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-3"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 10. GÓC GIÁO VIÊN                                                   -->
+    <!-- ===================================================================== -->
+    <section id="section-teacher" class="tab-section space-y-6">
+      <div class="rounded-3xl bg-slate-800 p-6 sm:p-8 text-white shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="space-y-1.5">
+          <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold uppercase">Khu vực 10 • Quản lý dạy học & kho học liệu lâu dài</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold">Góc Giáo Viên Ngữ Văn THCS</h2>
+          <p class="text-sm text-slate-300 max-w-2xl">
+            Tạo đề luyện viết hoặc ngữ liệu đọc hiểu giao thẳng sang học sinh, cấu hình lưu trữ Firebase Firestore qua nhiều năm học, theo dõi kết quả và xuất báo cáo CSV/Excel hoặc bản in.
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-2.5 no-print">
+          <button onclick="openConfigModal()" class="btn-pill px-4 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white text-xs font-bold flex items-center gap-2">
+            <i class="fa-solid fa-database"></i> Cấu hình Firebase & API
+          </button>
+          <button onclick="exportTeacherCSV()" class="btn-pill px-4 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold flex items-center gap-2">
+            <i class="fa-solid fa-file-csv"></i> Xuất CSV/Excel
+          </button>
+          <button onclick="window.print()" class="btn-pill px-4 py-2.5 bg-white/15 hover:bg-white/25 text-white text-xs font-bold flex items-center gap-2">
+            <i class="fa-solid fa-print"></i> In báo cáo
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Form tạo bài tập / đề luyện viết hoặc đọc hiểu mới -->
+        <div class="lg:col-span-5 bg-white rounded-3xl p-6 border border-indigo-100 shadow-xs space-y-4 no-print">
+          <h3 class="text-base font-extrabold text-slate-800"><i class="fa-solid fa-plus-circle text-indigo-600 mr-1.5"></i> Giao Đề Mới Cho Học Sinh</h3>
+          <form onsubmit="handleTeacherCreateAssignment(event)" class="space-y-3.5">
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1">Khối lớp:</label>
+                <select id="teacher-new-grade" class="w-full px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm font-semibold">
+                  <option value="6">Lớp 6</option>
+                  <option value="7">Lớp 7</option>
+                  <option value="8">Lớp 8</option>
+                  <option value="9">Lớp 9</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1">Hình thức giao:</label>
+                <select id="teacher-target-module" onchange="toggleTeacherModuleFields()" class="w-full px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm font-semibold">
+                  <option value="writing">Xưởng viết văn</option>
+                  <option value="reading">Phòng luyện Đọc hiểu</option>
+                </select>
+              </div>
+            </div>
+
+            <div id="teacher-writing-fields" class="space-y-3">
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1">Kiểu bài viết:</label>
+                <input id="teacher-new-type" type="text" placeholder="VD: Nghị luận xã hội / Tự sự" class="w-full px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm" />
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1">Đề bài:</label>
+                <textarea id="teacher-new-prompt" rows="2" placeholder="Nhập đề bài giao cho học sinh..." class="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"></textarea>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1">Dàn ý gợi ý / Đáp án & Tiêu chí đánh giá:</label>
+                <textarea id="teacher-new-rubric" rows="3" placeholder="Mở bài: ...&#10;Thân bài: ...&#10;Kết bài: ..." class="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"></textarea>
+              </div>
+            </div>
+
+            <div id="teacher-reading-fields" class="hidden space-y-3">
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1">Tên văn bản & Thể loại:</label>
+                <input id="teacher-read-title" type="text" placeholder="VD: Quê hương (Thơ lục bát)" class="w-full px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm" />
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1">Ngữ liệu văn bản:</label>
+                <textarea id="teacher-read-passage" rows="3" placeholder="Nhập đoạn văn bản đọc hiểu..." class="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"></textarea>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1">Câu hỏi vận dụng & Đáp án gợi ý:</label>
+                <textarea id="teacher-read-question" rows="2" placeholder="Câu hỏi và đáp án chuẩn..." class="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"></textarea>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-pill w-full py-3 gradient-primary text-white text-sm font-bold shadow-md">
+              <i class="fa-solid fa-cloud-arrow-up mr-1"></i> Lưu & Giao Bài Ngay
+            </button>
+          </form>
+        </div>
+
+        <!-- Bảng kết quả lớp học -->
+        <div class="lg:col-span-7 bg-white rounded-3xl p-6 border border-indigo-100 shadow-xs space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="text-base font-extrabold text-slate-800"><i class="fa-solid fa-table-list text-sky-600 mr-1.5"></i> Kết Quả Học Tập Lớp Học</h3>
+            <span id="teacher-year-badge" class="px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold">Năm học 2026-2027</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="border-b border-slate-200 text-xs font-extrabold text-slate-500 uppercase">
+                  <th class="py-3 px-3">Học sinh</th>
+                  <th class="py-3 px-3">Khối</th>
+                  <th class="py-3 px-3">Hoạt động</th>
+                  <th class="py-3 px-3">Điểm TB</th>
+                  <th class="py-3 px-3">Xếp loại</th>
+                </tr>
+              </thead>
+              <tbody id="teacher-students-tbody" class="divide-y divide-slate-100 text-sm"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="mt-12 border-t border-indigo-100 bg-white/75 py-6 text-center text-xs text-slate-500 no-print">
+    <p class="font-bold text-slate-700">Hành Trình Khám Phá Tri Thức • Ngữ Văn THCS (Lớp 6, 7, 8, 9)</p>
+    <p class="mt-0.5">Hỗ trợ lưu trữ cục bộ & đám mây Firebase Firestore lâu dài qua nhiều năm học.</p>
+  </footer>
+
+  <!-- ===================================================================== -->
+  <!-- MÃ NGUỒN JAVASCRIPT ĐIỀU KHIỂN 10 KHU VỰC, GEMINI AI & FIREBASE       -->
+  <!-- ===================================================================== -->
+  <script type="module">
+    // Khởi tạo module Firebase Firestore khi người dùng cấu hình firebaseConfig
+    import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    window.CloudStore = {
+      db: null,
+      schoolYear: "2026-2027",
+
+      async init(configObj, schoolYear) {
+        this.schoolYear = schoolYear || "2026-2027";
+        if (!configObj || !configObj.projectId) {
+          this.db = null;
+          return false;
+        }
+        try {
+          const appName = "ngu-van-thcs-cloud-app";
+          const existing = getApps().find(a => a.name === appName);
+          const app = existing || initializeApp(configObj, appName);
+          this.db = getFirestore(app);
+          return true;
+        } catch (err) {
+          console.error("Lỗi khởi tạo Firebase:", err);
+          this.db = null;
+          return false;
+        }
+      },
+
+      async saveAssignment(collectionName, payload) {
+        if (!this.db) return false;
+        try {
+          await addDoc(collection(this.db, collectionName), {
+            ...payload,
+            schoolYear: this.schoolYear,
+            createdAt: new Date().toISOString()
+          });
+          return true;
+        } catch (err) {
+          console.error("Lỗi ghi dữ liệu lên Firestore:", err);
+          return false;
+        }
+      },
+
+      async loadAssignments(collectionName) {
+        if (!this.db) return null;
+        try {
+          const snap = await getDocs(collection(this.db, collectionName));
+          return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        } catch (err) {
+          console.error("Lỗi đọc dữ liệu từ Firestore:", err);
+          return null;
+        }
+      }
+    };
+  </script>
+
+  <script>
+    // =======================================================================
+    // 1. TRẠNG THÁI & CẤU HÌNH LƯU TRỮ (LOCALSTORAGE + FIREBASE + GEMINI AI)
+    // =======================================================================
+    const DEFAULT_STATE = {
+      grade: 6,
+      role: "student",
+      schoolYear: "2026-2027",
+      geminiApiKey: "",
+      firebaseConfigText: "",
+      points: 20,
+      readingsDone: 0,
+      essaysEvaluated: 0,
+      arenaPlayed: 0,
+      creativeCount: 0,
+      scoreHistory: [{ label: "Khởi đầu", score: 7.5 }],
+      creativeWorks: [
+        {
+          id: 1,
+          title: "Trang sách mùa thu",
+          tag: "Thơ lục bát",
+          content: "Nắng vàng trải nhẹ sân trường\nTrang văn mở rộng con đường ước mơ\nGửi vào từng nét chữ thơ\nTình yêu quê mẹ đến giờ vẫn xanh.",
+          date: "Hôm nay"
+        }
+      ],
+      customWritingPrompts: [],
+      customReadingExercises: []
+    };
+
+    let appState = loadState();
+    let currentLibCat = "all";
+    let currentModalDoc = null;
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem("hanhTrinhTriThuc_v2");
+        if (raw) return { ...DEFAULT_STATE, ...JSON.parse(raw) };
+      } catch (e) {}
+      return { ...DEFAULT_STATE };
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem("hanhTrinhTriThuc_v2", JSON.stringify(appState));
+      } catch (e) {}
+      refreshStatsUI();
+    }
+
+    function showToast(message, type = "info") {
+      const wrap = document.getElementById("toast-container");
+      const el = document.createElement("div");
+      const palette = {
+        success: "bg-emerald-600 text-white",
+        error: "bg-rose-600 text-white",
+        warning: "bg-amber-500 text-white",
+        info: "bg-indigo-600 text-white"
+      };
+      const icon = {
+        success: "fa-circle-check",
+        error: "fa-circle-exclamation",
+        warning: "fa-triangle-exclamation",
+        info: "fa-sparkles"
+      };
+      el.className = `pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-2xl shadow-xl text-xs sm:text-sm font-semibold transition-all duration-300 ${palette[type] || palette.info}`;
+      el.innerHTML = `<i class="fa-solid ${icon[type] || icon.info} shrink-0"></i><span>${escapeHTML(message)}</span>`;
+      wrap.appendChild(el);
+      setTimeout(() => {
+        el.style.opacity = "0";
+        el.style.transform = "translateY(8px)";
+        setTimeout(() => el.remove(), 280);
+      }, 3200);
+    }
+
+    // Modal cấu hình Gemini API & Firebase Firestore
+    function openConfigModal() {
+      document.getElementById("cfg-gemini-key").value = appState.geminiApiKey || "";
+      document.getElementById("cfg-school-year").value = appState.schoolYear || "2026-2027";
+      document.getElementById("cfg-firebase-json").value = appState.firebaseConfigText || "";
+      updateCloudStatusBadge();
+      const m = document.getElementById("config-modal");
+      m.classList.remove("hidden");
+      m.classList.add("flex");
+    }
+
+    function closeConfigModal() {
+      const m = document.getElementById("config-modal");
+      m.classList.add("hidden");
+      m.classList.remove("flex");
+    }
+
+    function clearCloudConfig() {
+      appState.firebaseConfigText = "";
+      document.getElementById("cfg-firebase-json").value = "";
+      if (window.CloudStore) window.CloudStore.db = null;
+      saveState();
+      updateCloudStatusBadge();
+      showToast("Đã chuyển về lưu trữ trình duyệt (localStorage).", "info");
+    }
+
+    function updateCloudStatusBadge() {
+      const el = document.getElementById("cloud-status-text");
+      if (window.CloudStore && window.CloudStore.db) {
+        el.innerHTML = `<i class="fa-solid fa-cloud-check text-emerald-600 mr-1"></i> Đã kết nối Firebase Firestore (Lưu vĩnh viễn)`;
+      } else {
+        el.innerHTML = `<i class="fa-solid fa-hard-drive text-sky-600 mr-1"></i> Chế độ hiện tại: Lưu trữ trình duyệt (localStorage)`;
+      }
+    }
+
+    async function saveRuntimeConfig() {
+      const apiKeyInput = document.getElementById("cfg-gemini-key").value.trim();
+      const yearInput = document.getElementById("cfg-school-year").value.trim() || "2026-2027";
+      const fbText = document.getElementById("cfg-firebase-json").value.trim();
+
+      appState.geminiApiKey = apiKeyInput;
+      appState.schoolYear = yearInput;
+      appState.firebaseConfigText = fbText;
+
+      let connectedCloud = false;
+      if (fbText) {
+        try {
+          // Cho phép dán dạng JSON hoặc object JS đơn giản
+          const normalized = fbText
+            .replace(/^\s*(const|let|var)?\s*firebaseConfig\s*=\s*/i, "")
+            .replace(/;\s*$/, "")
+            .replace(/(\w+)\s*:/g, '"$1":')
+            .replace(/'/g, '"');
+          const parsedCfg = JSON.parse(normalized);
+          connectedCloud = await window.CloudStore.init(parsedCfg, yearInput);
+          if (connectedCloud) {
+            await syncFromFirestore();
+          } else {
+            showToast("Không thể kết nối Firebase. Kiểm tra lại cấu hình.", "warning");
+          }
+        } catch (e) {
+          showToast("Cấu hình Firebase chưa đúng định dạng JSON. Đã lưu các thiết lập khác.", "warning");
+        }
+      } else if (window.CloudStore) {
+        window.CloudStore.db = null;
+        window.CloudStore.schoolYear = yearInput;
+      }
+
+      saveState();
+      updateSchoolYearUI();
+      updateTutorModeUI();
+      updateCloudStatusBadge();
+      closeConfigModal();
+      showToast(
+        connectedCloud
+          ? `Đã lưu cấu hình & đồng bộ đám mây năm học ${yearInput}!`
+          : `Đã lưu thiết lập năm học ${yearInput}.`,
+        "success"
+      );
+    }
+
+    async function syncFromFirestore() {
+      if (!window.CloudStore || !window.CloudStore.db) return;
+      const cloudWriting = await window.CloudStore.loadAssignments("de_luyen_viet");
+      if (Array.isArray(cloudWriting) && cloudWriting.length > 0) {
+        appState.customWritingPrompts = cloudWriting;
+      }
+      const cloudReading = await window.CloudStore.loadAssignments("bai_doc_hieu");
+      if (Array.isArray(cloudReading) && cloudReading.length > 0) {
+        appState.customReadingExercises = cloudReading;
+      }
+      initWritingSection();
+      initReadingSection();
+    }
+
+    function updateSchoolYearUI() {
+      document.getElementById("header-school-year").textContent = appState.schoolYear || "2026-2027";
+      document.getElementById("teacher-year-badge").textContent = `Năm học ${appState.schoolYear || "2026-2027"}`;
+    }
+
+    // =======================================================================
+    // 2. GỌI GEMINI API (CÓ CHẾ ĐỘ LUYỆN TẬP MẪU THÔNG MINH KHI CHƯA CÓ KEY)
+    // =======================================================================
+    async function askGeminiOrFallback({ prompt, systemInstruction, schema, fallbackFn }) {
+      const key = (appState.geminiApiKey || "").trim();
+      if (!key) {
+        return fallbackFn();
+      }
+
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${encodeURIComponent(key)}`;
+      const body = {
+        contents: [{ parts: [{ text: prompt }] }],
+        systemInstruction: systemInstruction ? { parts: [{ text: systemInstruction }] } : undefined
+      };
+      if (schema) {
+        body.generationConfig = {
+          responseMimeType: "application/json",
+          responseSchema: schema
+        };
+      }
+
+      const delays = [900, 1800];
+      for (let i = 0; i <= delays.length; i++) {
+        try {
+          const res = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body)
+          });
+          if (!res.ok) throw new Error("API Error");
+          const data = await res.json();
+          const out = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (!out) throw new Error("Empty output");
+          return out;
+        } catch (err) {
+          if (i === delays.length) {
+            showToast("Đang dùng phản hồi gợi ý mẫu (kiểm tra lại Gemini API Key nếu cần).", "info");
+            return fallbackFn();
+          }
+          await new Promise(r => setTimeout(r, delays[i]));
+        }
+      }
+    }
+
+    // =======================================================================
+    // 3. KHO DỮ LIỆU NGỮ VĂN THCS (LỚP 6, 7, 8, 9)
+    // =======================================================================
+    const LIBRARY_ITEMS = [
+      {
+        id: "l6-1", grade: 6, category: "Văn bản đọc hiểu",
+        title: "Bài học đường đời đầu tiên", author: "Tô Hoài (Dế Mèn phiêu lưu kí)",
+        summary: "Câu chuyện về Dế Mèn khỏe mạnh, kiêu căng dẫn đến cái chết đáng tiếc của Dế Choắt và bài học sâu sắc đầu đời.",
+        detail: "• Nhân vật Dế Mèn: Vẻ đẹp cường tráng nhưng tính cách hống hách, thiếu suy nghĩ.\n• Sự việc then chốt: Trêu chị Cốc dẫn đến cái chết của Dế Choắt.\n• Bài học: Sống khiêm tốn, biết trân trọng và giúp đỡ người khác, chịu trách nhiệm về hành động của mình."
+      },
+      {
+        id: "l6-2", grade: 6, category: "Tiếng Việt",
+        title: "So sánh và Nhân hóa", author: "Kiến thức Tiếng Việt lớp 6",
+        summary: "Nhận diện và nêu tác dụng gợi hình, gợi cảm của phép so sánh và nhân hóa trong văn miêu tả, tự sự.",
+        detail: "• So sánh: Đối chiếu sự vật này với sự vật khác có nét tương đồng (như, là, tựa...).\n• Nhân hóa: Gọi hoặc tả sự vật bằng từ ngữ vốn dùng cho con người, giúp thế giới tự nhiên gần gũi, có hồn."
+      },
+      {
+        id: "l6-3", grade: 6, category: "Thể loại",
+        title: "Thơ lục bát & Truyện đồng thoại", author: "Đặc trưng thể loại lớp 6",
+        summary: "Quy luật số tiếng, gieo vần trong thơ lục bát và đặc điểm nhân vật loài vật trong truyện đồng thoại.",
+        detail: "• Thơ lục bát: Câu 6 tiếng xen kẽ câu 8 tiếng; vần lưng (tiếng thứ 6 câu lục vần với tiếng thứ 6 câu bát) và vần chân (tiếng thứ 8 câu bát vần với tiếng thứ 6 câu lục tiếp theo)."
+      },
+      {
+        id: "l7-1", grade: 7, category: "Văn bản đọc hiểu",
+        title: "Bầy chim chìa vôi", author: "Nguyễn Quang Thiều",
+        summary: "Tình cảm trong sáng, lo âu của hai anh em Mên và Mon cho tổ chim non giữa bãi bồi sông Đáy mùa nước lũ.",
+        detail: "• Cốt truyện xoay quanh nỗi lo âu và niềm vui vỡ òa khi đàn chim non cất cánh bay lên.\n• Nghệ thuật miêu tả tâm lí trẻ thơ tinh tế và khung cảnh thiên nhiên sông nước."
+      },
+      {
+        id: "l7-2", grade: 7, category: "Tiếng Việt",
+        title: "Mở rộng thành phần chính của câu bằng cụm từ", author: "Kiến thức Tiếng Việt lớp 7",
+        summary: "Dùng cụm danh từ, cụm động từ, cụm tính từ làm chủ ngữ hoặc vị ngữ giúp câu văn cụ thể, sinh động hơn.",
+        detail: "• Ví dụ: 'Những cơn gió thu dịu mát / khẽ lướt qua vòm lá' giúp bức tranh thiên nhiên rõ nét hơn câu rút gọn."
+      },
+      {
+        id: "l7-3", grade: 7, category: "Tác giả - Tác phẩm",
+        title: "Đoàn Giỏi và Đất rừng phương Nam", author: "Văn học lớp 7",
+        summary: "Vẻ đẹp thiên nhiên hoang dã, trù phú của rừng U Minh và tình người ấm áp miền Nam Bộ qua hành trình của bé An.",
+        detail: "• Ngòi bút giàu chất Nam Bộ, am hiểu sâu sắc hệ sinh thái và đời sống con người vùng sông nước."
+      },
+      {
+        id: "l8-1", grade: 8, category: "Văn bản đọc hiểu",
+        title: "Lá cờ thêu sáu chữ vàng", author: "Nguyễn Huy Tưởng",
+        summary: "Khí phách thiếu niên Trần Quốc Toản sục sôi lòng yêu nước và ý chí đánh giặc giữ nước thời Trần.",
+        detail: "• Chi tiết bóp nát quả cam thể hiện nỗi niềm uất ức vì tuổi nhỏ chưa được dự bàn việc nước và lòng quyết tâm lập công."
+      },
+      {
+        id: "l8-2", grade: 8, category: "Tiếng Việt",
+        title: "Đảo ngữ, Câu hỏi tu từ & Từ tượng hình, tượng thanh", author: "Kiến thức Tiếng Việt lớp 8",
+        summary: "Tăng sức nhấn mạnh, biểu cảm và gợi tả hình ảnh, âm thanh đặc sắc trong văn bản.",
+        detail: "• Đảo ngữ thay đổi trật tự cú pháp để nhấn mạnh trạng thái/hoạt động.\n• Từ tượng hình gợi dáng vẻ; từ tượng thanh mô phỏng âm thanh."
+      },
+      {
+        id: "l8-3", grade: 8, category: "Thể loại",
+        title: "Thơ thất ngôn bát cú Đường luật", author: "Đặc trưng thể loại lớp 8",
+        summary: "Bài thơ 8 câu, mỗi câu 7 chữ, thường có bố cục Đề – Thực – Luận – Kết và nghệ thuật đối chặt chẽ.",
+        detail: "• Câu 3–4 (Thực) và câu 5–6 (Luận) thường đối nhau về từ loại, thanh điệu và ý nghĩa."
+      },
+      {
+        id: "l9-1", grade: 9, category: "Văn bản đọc hiểu",
+        title: "Chuyện người con gái Nam Xương", author: "Nguyễn Dữ",
+        summary: "Vẻ đẹp thủy chung, hiếu thảo của Vũ Nương và bi kịch oan khuất dưới chế độ phong kiến trọng nam khinh nữ.",
+        detail: "• Giá trị nhân đạo: Trân trọng phẩm chất người phụ nữ và xót thương cho số phận oan nghiệt.\n• Nghệ thuật kết hợp tự sự với yếu tố kì ảo."
+      },
+      {
+        id: "l9-2", grade: 9, category: "Tác giả - Tác phẩm",
+        title: "Nguyễn Du và Truyện Kiều", author: "Văn học trung đại lớp 9",
+        summary: "Kiệt tác thơ lục bát của Đại thi hào Nguyễn Du với nghệ thuật tả cảnh ngụ tình sâu sắc.",
+        detail: "• Khắc họa tinh tế thế giới nội tâm nhân vật và cảnh sắc thiên nhiên mang âm hưởng tâm trạng."
+      },
+      {
+        id: "l9-3", grade: 9, category: "Tiến Việt",
+        title: "Điển tích, điển cố & Dẫn trực tiếp, gián tiếp", author: "Kiến thức Tiếng Việt lớp 9",
+        summary: "Sử dụng điển tích, điển cố hàm súc và dẫn lời nói, ý nghĩ chuẩn xác trong văn bản nghị luận.",
+        detail: "• Dẫn trực tiếp giữ nguyên văn và đặt trong dấu ngoặc kép; dẫn gián tiếp thuật lại có điều chỉnh phù hợp ngữ cảnh."
+      }
+    ];
+
+    const DEFAULT_READING_BY_GRADE = {
+      6: [
+        {
+          id: "r6-1", title: "Dòng sông tuổi thơ", genre: "Tản văn",
+          passage: "Tuổi thơ tôi gắn liền với con sông nhỏ chảy hiền hòa qua đầu làng. Mỗi buổi chiều, mặt nước lấp lánh ánh nắng vàng như rắc kim tuyến. Trên bờ, hàng tre nghiêng mình soi bóng mát rượi, tiếng gió xào xạc hòa cùng tiếng cười nói rộn ràng của lũ trẻ tan học.",
+          source: "Ngữ liệu luyện đọc hiểu Lớp 6",
+          questions: [
+            { level: "Nhận biết", type: "mcq", q: "Câu 1: Con sông trong đoạn văn gắn liền với khung cảnh nào vào buổi chiều?", opts: ["Ánh nắng vàng lấp lánh và hàng tre soi bóng", "Bến cảng tấp nập tàu thuyền", "Rừng thông reo trong sương sớm", "Cánh đồng lúa chín vàng"], ans: 0, exp: "Đoạn văn tả buổi chiều với 'mặt nước lấp lánh ánh nắng vàng' và 'hàng tre nghiêng mình soi bóng mát rượi'." },
+            { level: "Thông hiểu", type: "mcq", q: "Câu 2: Hình ảnh 'mặt nước lấp lánh ánh nắng vàng như rắc kim tuyến' sử dụng biện pháp tu từ gì?", opts: ["Nhân hóa", "So sánh", "Điệp từ", "Nói quá"], ans: 1, exp: "Sử dụng từ so sánh 'như' để liên tưởng ánh nắng trên mặt nước với kim tuyến lấp lánh." },
+            { level: "Vận dụng", type: "essay", q: "Câu 3: Theo em, vì sao cảnh vật quê hương luôn để lại ấn tượng sâu đậm trong lòng mỗi người?", sample: "Vì cảnh vật quê hương gắn bó với những kỉ niệm tuổi thơ, gia đình và những rung cảm đầu đời khó phai." }
+          ]
+        }
+      ],
+      7: [
+        {
+          id: "r7-1", title: "Mùa xuân nho nhỏ", genre: "Thơ năm chữ",
+          passage: "Mọc giữa dòng sông xanh\nMột bông hoa tím biếc\nƠi con chim chiền chiện\nHót chi mà vang trời\nTừng giọt long lanh rơi\nTôi đưa tay tôi hứng.",
+          source: "Thanh Hải",
+          questions: [
+            { level: "Nhận biết", type: "mcq", q: "Câu 1: Bông hoa trong khổ thơ có màu sắc gì?", opts: ["Đỏ thắm", "Tím biếc", "Vàng rực", "Trắng tinh"], ans: 1, exp: "Câu thơ viết rõ: 'Một bông hoa tím biếc'." },
+            { level: "Thông hiểu", type: "mcq", q: "Câu 2: Câu thơ 'Từng giọt long lanh rơi / Tôi đưa tay tôi hứng' gợi cảm nhận gì?", opts: ["Sự trân trọng, nâng niu vẻ đẹp âm thanh mùa xuân", "Cơn mưa rào mùa hạ", "Nỗi buồn chia ly", "Cảnh đêm trăng tĩnh mịch"], ans: 0, exp: "Tiếng chim hót được cảm nhận như 'từng giọt long lanh' cho thấy sự yêu mến, nâng niu mùa xuân của tác giả." },
+            { level: "Vận dụng", type: "essay", q: "Câu 3: Em có thể làm gì 'nhỏ nhỏ' để góp phần làm đẹp cho lớp học hoặc môi trường sống của mình?", sample: "Em có thể giữ gìn vệ sinh trường lớp, giúp đỡ bạn bè cùng tiến bộ và sống chan hòa, trách nhiệm." }
+          ]
+        }
+      ],
+      8: [
+        {
+          id: "r8-1", title: "Nắng mới", genre: "Thơ bảy chữ",
+          passage: "Mỗi lần nắng mới hắt bên song,\nXao xác, gà trưa gáy não nùng,\nLòng rượi buồn theo thời dĩ vãng,\nChập chờn sống lại những ngày không.",
+          source: "Lưu Trọng Lư",
+          questions: [
+            { level: "Nhận biết", type: "mcq", q: "Câu 1: Âm thanh nào xuất hiện trong đoạn thơ?", opts: ["Tiếng sáo diều", "Tiếng gà trưa gáy não nùng", "Tiếng sóng vỗ bờ", "Tiếng chuông chùa"], ans: 1, exp: "Dòng thơ thứ hai nhắc đến 'gà trưa gáy não nùng'." },
+            { level: "Thông hiểu", type: "mcq", q: "Câu 2: Từ 'xao xác' và 'não nùng' có tác dụng gì?", opts: ["Gợi không gian lắng đọng và nỗi nhớ man mác", "Miêu tả khung cảnh náo nhiệt lễ hội", "Nhấn mạnh sự khắc nghiệt của bão tố", "Tạo vần điệu vui tươi rộn rã"], ans: 0, exp: "Các từ láy gợi âm thanh khẽ khàng và tâm trạng bâng khuâng, nhớ thương." },
+            { level: "Vận dụng", type: "essay", q: "Câu 3: Từ đoạn thơ, em rút ra suy nghĩ gì về việc trân trọng những khoảnh khắc bên người thân?", sample: "Những khoảnh khắc bình dị bên gia đình rất đáng quý; cần yêu thương và quan tâm nhau khi còn có thể." }
+          ]
+        }
+      ],
+      9: [
+        {
+          id: "r9-1", title: "Cảnh ngày xuân", genre: "Thơ lục bát",
+          passage: "Ngày xuân con én đưa thoi,\nThiều quang chín chục đã ngoài sáu mươi.\nCỏ non xanh tận chân trời,\nCành lê trắng điểm một vài bông hoa.",
+          source: "Nguyễn Du – Truyện Kiều",
+          questions: [
+            { level: "Nhận biết", type: "mcq", q: "Câu 1: Bức tranh mùa xuân được gợi tả qua sắc màu chủ đạo nào?", opts: ["Xanh của cỏ non và trắng điểm của hoa lê", "Đỏ của hoa phượng và vàng của nắng hạ", "Vàng rực của hoa cúc và tím của chiều thu", "Trắng xóa của sương mù mùa đông"], ans: 0, exp: "Hai câu thơ nổi bật với sắc xanh cỏ non trải rộng và sắc trắng hoa lê điểm xuyết." },
+            { level: "Thông hiểu", type: "mcq", q: "Câu 2: Cách dùng từ 'điểm' trong 'Cành lê trắng điểm một vài bông hoa' có giá trị gì?", opts: ["Tạo sự hài hòa, tinh tế giữa nền xanh rộng lớn và nét chấm phá thanh khiết", "Nhấn mạnh sự rậm rạp che lấp bầu trời", "Gợi khung cảnh héo úa tàn phai", "Thể hiện sự đối lập gay gắt"], ans: 0, exp: "Chữ 'điểm' tinh tế làm nổi bật vẻ đẹp thanh tao, nhẹ nhàng của mùa xuân." },
+            { level: "Vận dụng", type: "essay", q: "Câu 3: Qua đoạn thơ, em cảm nhận thế nào về tinh thần yêu thiên nhiên và thẩm mĩ của tác giả?", sample: "Tác giả có tâm hồn tinh tế, nhạy cảm trước vẻ đẹp hài hòa, trong sáng của thiên nhiên." }
+          ]
+        }
+      ]
+    };
+
+    const DEFAULT_WRITING_BY_GRADE = {
+      6: [
+        {
+          id: "w6-1", type: "Tự sự", words: "~300 chữ",
+          prompt: "Kể lại một kỉ niệm đáng nhớ của em ở trường học hoặc gia đình.",
+          outline: [
+            "Mở bài: Giới thiệu kỉ niệm, thời gian, địa điểm và cảm xúc chung.",
+            "Thân bài: Kể diễn biến sự việc theo trình tự hợp lí, xen kẽ cảm xúc của em.",
+            "Kết bài: Nêu ý nghĩa của kỉ niệm đối với bản thân."
+          ]
+        },
+        {
+          id: "w6-2", type: "Biểu cảm", words: "~200 chữ",
+          prompt: "Viết đoạn văn ghi lại cảm xúc của em về một bài thơ lục bát.",
+          outline: [
+            "Mở đoạn: Nêu tên bài thơ, tác giả và cảm xúc chung.",
+            "Thân đoạn: Chỉ ra hình ảnh, vần điệu hoặc biện pháp tu từ gây ấn tượng.",
+            "Kết đoạn: Khẳng định ý nghĩa của bài thơ với em."
+          ]
+        }
+      ],
+      7: [
+        {
+          id: "w7-1", type: "Biểu cảm", words: "~350 chữ",
+          prompt: "Viết bài văn biểu cảm về một người thân mà em yêu quý.",
+          outline: [
+            "Mở bài: Giới thiệu người thân và tình cảm của em.",
+            "Thân bài: Nêu đặc điểm, cử chỉ yêu thương và một việc làm đáng nhớ của người đó.",
+            "Kết bài: Khẳng định tình cảm gắn bó và lời hứa của em."
+          ]
+        },
+        {
+          id: "w7-2", type: "Nghị luận xã hội", words: "~350 chữ",
+          prompt: "Suy nghĩ của em về tinh thần sẻ chia trong cuộc sống.",
+          outline: [
+            "Mở bài: Giới thiệu vấn đề sẻ chia.",
+            "Thân bài: Giải thích ngắn gọn; nêu ý nghĩa và dẫn chứng thực tế; phê phán sự thờ ơ.",
+            "Kết bài: Liên hệ bản thân."
+          ]
+        }
+      ],
+      8: [
+        {
+          id: "w8-1", type: "Nghị luận văn học", words: "~450 chữ",
+          prompt: "Phân tích vẻ đẹp nhân vật Trần Quốc Toản trong 'Lá cờ thêu sáu chữ vàng'.",
+          outline: [
+            "Mở bài: Giới thiệu tác giả, tác phẩm và nét nổi bật của nhân vật.",
+            "Thân bài: Phân tích lòng yêu nước, chí khí quyết tâm đánh giặc và hành động bóp nát quả cam.",
+            "Kết bài: Khái quát giá trị nhân vật và suy nghĩ của em."
+          ]
+        },
+        {
+          id: "w8-2", type: "Nghị luận xã hội", words: "~400 chữ",
+          prompt: "Suy nghĩ của em về thói quen đọc sách của học sinh hiện nay.",
+          outline: [
+            "Mở bài: Đặt vấn đề về vai trò của đọc sách.",
+            "Thân bài: Lợi ích của việc đọc sách; thực trạng và giải pháp rèn thói quen đọc.",
+            "Kết bài: Khẳng định giá trị của tri thức từ sách."
+          ]
+        }
+      ],
+      9: [
+        {
+          id: "w9-1", type: "Nghị luận văn học", words: "~500 chữ",
+          prompt: "Phân tích vẻ đẹp phẩm chất và bi kịch của nhân vật Vũ Nương trong 'Chuyện người con gái Nam Xương'.",
+          outline: [
+            "Mở bài: Giới thiệu Nguyễn Dữ, tác phẩm và nhân vật Vũ Nương.",
+            "Thân bài: Phẩm chất thủy chung, hiếu thảo; nguyên nhân bi kịch; nghệ thuật kể chuyện.",
+            "Kết bài: Đánh giá giá trị nhân đạo của tác phẩm."
+          ]
+        },
+        {
+          id: "w9-2", type: "Nghị luận xã hội", words: "~450 chữ",
+          prompt: "Suy nghĩ của em về sự trung thực trong học tập và cuộc sống.",
+          outline: [
+            "Mở bài: Dẫn dắt và nêu vấn đề trung thực.",
+            "Thân bài: Ý nghĩa của trung thực; dẫn chứng; tác hại của gian dối.",
+            "Kết bài: Bài học rèn luyện của bản thân."
+          ]
+        }
+      ]
+    };
+
+    const ARENA_BANK = {
+      6: [
+        { cat: "Văn học", q: "Tác giả truyện 'Dế Mèn phiêu lưu kí' là ai?", opts: ["Tô Hoài", "Nam Cao", "Kim Lân", "Thạch Lam"], ans: 0 },
+        { cat: "Tiếng Việt", q: "Biện pháp tu từ nào đối chiếu hai sự vật có nét tương đồng?", opts: ["Nhân hóa", "So sánh", "Hoán dụ", "Đảo ngữ"], ans: 1 },
+        { cat: "Thể loại", q: "Thơ lục bát gồm các cặp câu mấy tiếng?", opts: ["5 và 7 tiếng", "6 và 8 tiếng", "7 và 7 tiếng", "4 và 5 tiếng"], ans: 1 },
+        { cat: "Tiếng Việt", q: "Từ nào dưới đây là từ láy?", opts: ["Bàn ghế", "Lung linh", "Học tập", "Cây cối"], ans: 1 },
+        { cat: "Văn học", q: "Nhân vật Thánh Gióng đánh giặc Ân bằng vũ khí gì?", opts: ["Cung tên", "Bụi tre ngà", "Gươm báu", "Rìu chiến"], ans: 1 },
+        { cat: "Tiếng Việt", q: "Từ 'như' trong 'Mặt trời như quả cầu lửa' là gì?", opts: ["Danh từ", "Từ so sánh", "Tính từ", "Đại từ"], ans: 1 },
+        { cat: "Thể loại", q: "Truyện đồng thoại thường viết về đối tượng nào?", opts: ["Loài vật, đồ vật được nhân hóa", "Thần thoại cổ đại", "Bút kí lịch sử", "Phóng sự báo chí"], ans: 0 },
+        { cat: "Tiếng Việt", q: "Thành ngữ 'Uống nước nhớ nguồn' nhắc đến truyền thống nào?", opts: ["Hiếu học", "Tôn sư trọng đạo / Biết ơn", "Đoàn kết", "Dũng cảm"], ans: 1 }
+      ],
+      7: [
+        { cat: "Văn học", q: "Tác phẩm 'Đất rừng phương Nam' do ai sáng tác?", opts: ["Đoàn Giỏi", "Võ Quảng", "Nguyễn Tuân", "Bùi Hiển"], ans: 0 },
+        { cat: "Tiếng Việt", q: "Biện pháp 'nói giảm nói tránh' có tác dụng gì?", opts: ["Làm giảm cảm giác đau buồn, nặng nề hoặc giữ lịch sự", "Phóng đại kích thước", "Tạo vần điệu", "Liệt kê dài dòng"], ans: 0 },
+        { cat: "Văn học", q: "Bài thơ 'Mùa xuân nho nhỏ' là của nhà thơ nào?", opts: ["Thanh Hải", "Chế Lan Viên", "Huy Cận", "Tế Hanh"], ans: 0 },
+        { cat: "Tiếng Việt", q: "Phó từ thường đi kèm với loại từ nào?", opts: ["Động từ, tính từ", "Quan hệ từ", "Thán từ", "Tình thái từ"], ans: 0 },
+        { cat: "Văn học", q: "Hai anh em trong 'Bầy chim chìa vôi' tên là gì?", opts: ["Mên và Mon", "An và Cò", "Nam và Bắc", "Minh và Lan"], ans: 0 },
+        { cat: "Tiếng Việt", q: "Mở rộng thành phần câu bằng cụm từ giúp câu văn như thế nào?", opts: ["Chi tiết, sinh động hơn", "Ngắn gọn tối giản hơn", "Khó hiểu hơn", "Mất chủ ngữ"], ans: 0 },
+        { cat: "Thể loại", q: "Tục ngữ là câu nói dân gian có đặc điểm gì?", opts: ["Ngắn gọn, có nhịp điệu, đúc kết kinh nghiệm", "Dài nhiều chương hồi", "Chỉ dùng trong sân khấu", "Viết bằng chữ Hán"], ans: 0 },
+        { cat: "Tiếng Việt", q: "Dấu chấm lửng thường dùng để làm gì?", opts: ["Biểu thị lời nói ngập ngừng hoặc còn nhiều ý chưa liệt kê", "Thay dấu chấm hết câu kể", "Tách hai vế câu ghép", "Viết tắt tên riêng"], ans: 0 }
+      ],
+      8: [
+        { cat: "Văn học", q: "Trần Quốc Toản xuất hiện trong tác phẩm nào?", opts: ["Lá cờ thêu sáu chữ vàng", "Tắt đèn", "Lão Hạc", "Vợ nhặt"], ans: 0 },
+        { cat: "Thể loại", q: "Thơ thất ngôn bát cú Đường luật có mấy câu?", opts: ["6 câu", "7 câu", "8 câu", "10 câu"], ans: 2 },
+        { cat: "Tiếng Việt", q: "Đảo ngữ là biện pháp thay đổi điều gì trong câu?", opts: ["Trật tự cấu tạo ngữ pháp", "Chữ viết tắt", "Dấu câu kết thúc", "Ngôi kể chuyện"], ans: 0 },
+        { cat: "Văn học", q: "Bài thơ 'Nắng mới' của tác giả nào?", opts: ["Lưu Trọng Lư", "Xuân Diệu", "Hàn Mặc Tử", "Nguyễn Bính"], ans: 0 },
+        { cat: "Tiếng Việt", q: "Từ 'xao xác' thuộc nhóm từ nào?", opts: ["Từ tượng thanh / gợi tả", "Thuật ngữ toán học", "Biệt ngữ", "Danh từ riêng"], ans: 0 },
+        { cat: "Văn học", q: "'Hịch tướng sĩ' do ai viết?", opts: ["Trần Quốc Tuấn", "Nguyễn Trãi", "Lê Lợi", "Quang Trung"], ans: 0 },
+        { cat: "Tiếng Việt", q: "Câu hỏi tu từ dùng chủ yếu để làm gì?", opts: ["Khẳng định, phủ định hoặc bộc lộ cảm xúc", "Hỏi giờ giấc", "Hỏi đường đi", "Ra mệnh lệnh"], ans: 0 },
+        { cat: "Thể loại", q: "Văn bản nghị luận cần có yếu tố nào?", opts: ["Luận điểm, lí lẽ và bằng chứng", "Nhân vật thần thoại", "Lời thoại nhân vật kịch", "Nhịp thơ lục bát"], ans: 0 }
+      ],
+      9: [
+        { cat: "Văn học", q: "'Chuyện người con gái Nam Xương' trích từ tập nào?", opts: ["Truyền kì mạn lục", "Lĩnh Nam chích quái", "Nam ông mộng lục", "Thượng kinh kí sự"], ans: 0 },
+        { cat: "Văn học", q: "Chi tiết nào gắn với hiểu lầm của Trương Sinh?", opts: ["Chiếc bóng trên vách", "Chiếc khăn tay", "Cuốn sổ nhật kí", "Chiếc nhẫn ngọc"], ans: 0 },
+        { cat: "Văn học", q: "'Truyện Kiều' được viết theo thể thơ nào?", opts: ["Thơ lục bát", "Thơ thất ngôn", "Thơ tự do", "Thơ năm chữ"], ans: 0 },
+        { cat: "Tiếng Việt", q: "Dẫn trực tiếp có đặc điểm gì?", opts: ["Nhắc lại nguyên văn và đặt trong dấu ngoặc kép", "Thuật lại không dùng ngoặc kép", "Chỉ dùng ở cuối đoạn", "Luôn viết in hoa"], ans: 0 },
+        { cat: "Văn học", q: "Bút pháp 'tả cảnh ngụ tình' có nghĩa là gì?", opts: ["Tả cảnh thiên nhiên để gửi gắm tâm trạng con người", "Chỉ tả cảnh không có cảm xúc", "Kể chuyện cười dân gian", "Lập luận phản biện"], ans: 0 },
+        { cat: "Tiếng Việt", q: "Điển tích, điển cố là gì?", opts: ["Câu chuyện, sự việc xưa được dẫn cô đúc trong văn học", "Từ ngữ địa phương mới", "Dấu câu ngắt nhịp", "Phép điệp từ"], ans: 0 },
+        { cat: "Thể loại", q: "'Hoàng Lê nhất thống chí' thuộc thể loại nào?", opts: ["Tiểu thuyết chương hồi", "Thơ đường luật", "Tùy bút", "Thơ lục bát"], ans: 0 },
+        { cat: "Tiếng Việt", q: "Hoán dụ là gọi tên sự vật này bằng sự vật khác có quan hệ gì?", opts: ["Quan hệ gần gũi", "Đối lập hoàn toàn", "Không liên quan", "Đồng âm khác nghĩa"], ans: 0 }
+      ]
+    };
+
+    const CREATIVE_LIST = [
+      { tag: "Sáng tác thơ", title: "Mùa Thu Trên Trang Vở", desc: "Sáng tác bài thơ ngắn (4–8 dòng) về mùa thu, mái trường hoặc niềm vui đọc sách." },
+      { tag: "Viết tiếp cái kết", title: "Cái Kết Ấm Áp Cho Đôi Bạn", desc: "Viết tiếp một đoạn văn ngắn kể về khoảnh khắc hòa giải và yêu thương sau hiểu lầm." },
+      { tag: "Nhật ký nhân vật", title: "Một Ngày Của Nhân Vật Văn Học", desc: "Hóa thân vào nhân vật em yêu thích để viết một đoạn nhật ký chia sẻ suy nghĩ của nhân vật." }
+    ];
+
+    const BADGES = [
+      { id: "b1", title: "Khởi Hành", desc: "Đạt từ 10 điểm tri thức", icon: "fa-compass", ok: s => s.points >= 10 },
+      { id: "b2", title: "Chăm Đọc Hiểu", desc: "Hoàn thành 1 bài đọc hiểu", icon: "fa-book-open", ok: s => s.readingsDone >= 1 },
+      { id: "b3", title: "Cây Bút Trẻ", desc: "Chấm 1 bài viết với AI", icon: "fa-feather-pointed", ok: s => s.essaysEvaluated >= 1 },
+      { id: "b4", title: "Đấu Sĩ Tri Thức", desc: "Chơi 1 lượt Đấu trường", icon: "fa-trophy", ok: s => s.arenaPlayed >= 1 },
+      { id: "b5", title: "Nhà Sáng Tạo", desc: "Lưu 1 tác phẩm sáng tạo", icon: "fa-palette", ok: s => s.creativeCount >= 1 },
+      { id: "b6", title: "Ngôi Sao Văn Học", desc: "Đạt từ 120 điểm tri thức", icon: "fa-crown", ok: s => s.points >= 120 }
+    ];
+
+    // =======================================================================
+    // 4. ĐIỀU HƯỚNG TAB, KHỐI LỚP & VAI TRÒ
+    // =======================================================================
+    function switchTab(name) {
+      document.querySelectorAll(".tab-section").forEach(sec => sec.classList.remove("active"));
+      document.getElementById(`section-${name}`)?.classList.add("active");
+
+      document.querySelectorAll(".nav-tab").forEach(btn => {
+        if (btn.dataset.tab === name) {
+          btn.classList.add("gradient-primary", "text-white", "shadow-xs");
+          btn.classList.remove("text-slate-600", "hover:bg-indigo-50");
+        } else {
+          btn.classList.remove("gradient-primary", "text-white", "shadow-xs");
+          btn.classList.add("text-slate-600", "hover:bg-indigo-50");
+        }
+      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function setGrade(g, silent = false) {
+      appState.grade = Number(g);
+      saveState();
+
+      document.querySelectorAll(".grade-btn").forEach(btn => {
+        if (Number(btn.dataset.gradeBtn) === appState.grade) {
+          btn.className = "btn-pill grade-btn px-2 sm:px-3 py-1 text-xs font-bold bg-indigo-600 text-white shadow-2xs";
+        } else {
+          btn.className = "btn-pill grade-btn px-2 sm:px-3 py-1 text-xs font-bold text-slate-600 hover:bg-white";
+        }
+      });
+
+      document.getElementById("home-grade-label").textContent = `Lớp ${appState.grade}`;
+      document.querySelectorAll(".grade-sync").forEach(el => {
+        el.textContent = `Lớp ${appState.grade}`;
+      });
+
+      renderLibrary();
+      renderTutorPrompts();
+      initReadingSection();
+      initWritingSection();
+      resetArena();
+
+      if (!silent) showToast(`Đã chọn Ngữ văn Lớp ${appState.grade}`, "info");
+    }
+
+    function toggleRole() {
+      appState.role = appState.role === "student" ? "teacher" : "student";
+      saveState();
+      updateRoleUI();
+      if (appState.role === "teacher") {
+        switchTab("teacher");
+        showToast("Đã chuyển sang Góc Giáo viên", "success");
+      } else {
+        switchTab("home");
+        showToast("Đã chuyển sang chế độ Học sinh", "info");
+      }
+    }
+
+    function updateRoleUI() {
+      const btn = document.getElementById("role-toggle-btn");
+      const icon = document.getElementById("role-icon");
+      const label = document.getElementById("role-label");
+      if (appState.role === "teacher") {
+        btn.className = "btn-pill px-3 py-1.5 text-xs font-bold flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs";
+        icon.className = "fa-solid fa-chalkboard-user text-amber-200";
+        label.textContent = "Giáo viên";
+      } else {
+        btn.className = "btn-pill px-3 py-1.5 text-xs font-bold flex items-center gap-1.5 bg-slate-800 hover:bg-slate-900 text-white shadow-xs";
+        icon.className = "fa-solid fa-user-graduate text-sky-300";
+        label.textContent = "Học sinh";
+      }
+    }
+
+    // =======================================================================
+    // 5. KHU VỰC 2: THƯ VIỆN NGỮ VĂN
+    // =======================================================================
+    function setLibraryCategory(cat) {
+      currentLibCat = cat;
+      document.querySelectorAll(".lib-cat-btn").forEach(btn => {
+        btn.className = btn.dataset.libCat === cat
+          ? "btn-pill lib-cat-btn px-4 py-2 text-xs font-bold bg-indigo-600 text-white"
+          : "btn-pill lib-cat-btn px-4 py-2 text-xs font-bold bg-slate-100 text-slate-600 hover:bg-indigo-50";
+      });
+      renderLibrary();
+    }
+
+    function renderLibrary() {
+      const grid = document.getElementById("library-grid");
+      const kw = (document.getElementById("library-search").value || "").trim().toLowerCase();
+      const allGrades = document.getElementById("library-all-grades").checked;
+
+      const list = LIBRARY_ITEMS.filter(item => {
+        const okGrade = allGrades || item.grade === appState.grade;
+        const okCat = currentLibCat === "all" || item.category === currentLibCat;
+        const okKw = !kw || item.title.toLowerCase().includes(kw) || item.author.toLowerCase().includes(kw) || item.summary.toLowerCase().includes(kw);
+        return okGrade && okCat && okKw;
+      });
+
+      if (!list.length) {
+        grid.innerHTML = `<div class="col-span-full bg-white rounded-3xl p-8 text-center text-sm text-slate-500 border border-slate-100">Không tìm thấy tài liệu phù hợp.</div>`;
+        return;
+      }
+
+      grid.innerHTML = list.map(item => `
+        <article class="bg-white rounded-3xl p-6 border border-indigo-100 shadow-xs flex flex-col justify-between space-y-4">
+          <div class="space-y-2.5">
+            <div class="flex items-center justify-between gap-2">
+              <span class="px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold">${escapeHTML(item.category)}</span>
+              <span class="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 text-xs font-bold">Lớp ${item.grade}</span>
+            </div>
+            <h3 class="text-lg font-extrabold text-slate-800">${escapeHTML(item.title)}</h3>
+            <p class="text-xs font-semibold text-sky-700">${escapeHTML(item.author)}</p>
+            <p class="text-sm text-slate-600 leading-relaxed">${escapeHTML(item.summary)}</p>
+          </div>
+          <button onclick="openLibraryModal('${item.id}')" class="btn-pill w-full py-2.5 px-4 bg-indigo-50 hover:bg-indigo-600 text-indigo-700 hover:text-white text-xs font-bold">
+            Xem chi tiết bài học
+          </button>
+        </article>
+      `).join("");
+    }
+
+    function openLibraryModal(id) {
+      const item = LIBRARY_ITEMS.find(x => x.id === id);
+      if (!item) return;
+      currentModalDoc = item;
+      document.getElementById("modal-grade-badge").textContent = `Lớp ${item.grade}`;
+      document.getElementById("modal-category-badge").textContent = item.category;
+      document.getElementById("modal-title").textContent = item.title;
+      document.getElementById("modal-author").textContent = item.author;
+      document.getElementById("modal-content").innerHTML = `
+        <p class="p-4 rounded-2xl bg-indigo-50/70 text-sm font-semibold text-indigo-950">${escapeHTML(item.summary)}</p>
+        <div class="whitespace-pre-line text-sm sm:text-base text-slate-700">${escapeHTML(item.detail)}</div>
+      `;
+      const m = document.getElementById("library-modal");
+      m.classList.remove("hidden");
+      m.classList.add("flex");
+    }
+
+    function closeLibraryModal() {
+      const m = document.getElementById("library-modal");
+      m.classList.add("hidden");
+      m.classList.remove("flex");
+    }
+
+    function askTutorFromLibrary() {
+      if (!currentModalDoc) return;
+      const title = currentModalDoc.title;
+      closeLibraryModal();
+      switchTab("tutor");
+      const inp = document.getElementById("tutor-input");
+      inp.value = `Gợi ý giúp em cách tìm hiểu và lập dàn ý cho nội dung "${title}"`;
+      inp.focus();
+    }
+
+    // =======================================================================
+    // 6. KHU VỰC 3: GIA SƯ AI (GỢI MỞ, TÌM Ý, LẬP DÀN Ý, KHÔNG LÀM BÀI HỘ)
+    // =======================================================================
+    const QUICK_TUTOR_BY_GRADE = {
+      6: ["Gợi ý dàn ý kể kỉ niệm đáng nhớ", "Phân biệt so sánh và nhân hóa", "Bài học từ Dế Mèn phiêu lưu kí"],
+      7: ["Hướng dẫn dàn ý biểu cảm về người thân", "Mở rộng thành phần chính của câu bằng cụm từ", "Gợi ý luận điểm về tinh thần sẻ chia"],
+      8: ["Dàn ý phân tích nhân vật Trần Quốc Toản", "Phân biệt từ tượng hình và từ tượng thanh", "Bố cục thơ thất ngôn bát cú Đường luật"],
+      9: ["Dàn ý phân tích nhân vật Vũ Nương", "Tả cảnh ngụ tình trong Truyện Kiều", "Cách dẫn trực tiếp và gián tiếp"]
+    };
+
+    function updateTutorModeUI() {
+      const el = document.getElementById("tutor-mode-label");
+      el.textContent = appState.geminiApiKey
+        ? "Gia sư AI • Kết nối Gemini API trực tiếp"
+        : "Gia sư AI • Chế độ gợi mở luyện tập (có thể gắn API Key)";
+    }
+
+    function renderTutorPrompts() {
+      const list = QUICK_TUTOR_BY_GRADE[appState.grade] || QUICK_TUTOR_BY_GRADE[6];
+      document.getElementById("tutor-quick-prompts").innerHTML = list.map(q => `
+        <button onclick="runQuickTutor('${q.replace(/'/g, "\\'")}')" class="w-full text-left p-3 rounded-2xl bg-slate-50 hover:bg-indigo-50 border border-slate-200/70 text-xs font-semibold text-slate-700 hover:text-indigo-800 transition">
+          <i class="fa-solid fa-comment-dots text-indigo-500 mr-1.5"></i>${escapeHTML(q)}
+        </button>
+      `).join("");
+    }
+
+    function clearTutorChat() {
+      document.getElementById("tutor-messages").innerHTML = `
+        <div class="flex items-start gap-3">
+          <div class="w-9 h-9 rounded-2xl gradient-primary flex items-center justify-center text-white text-sm shrink-0">
+            <i class="fa-solid fa-robot"></i>
+          </div>
+          <div class="bg-white p-4 rounded-2xl rounded-tl-none border border-indigo-100 text-sm text-slate-700 max-w-xl leading-relaxed">
+            Chào em! Gia sư AI Ngữ văn <strong>Lớp ${appState.grade}</strong> sẵn sàng gợi ý cách tìm ý, lập dàn ý và giải thích kiến thức để em tự làm bài thật tốt. Em đang cần hỗ trợ phần nào?
+          </div>
+        </div>
+      `;
+    }
+
+    function runQuickTutor(q) {
+      document.getElementById("tutor-input").value = q;
+      handleTutorSubmit(new Event("submit"));
+    }
+
+    function buildPedagogicalTutorFallback(question) {
+      return `• Gợi ý hướng tiếp cận cho câu hỏi: "${question}"\n` +
+        `1. Xác định yêu cầu trọng tâm: Em cần làm rõ khái niệm/vấn đề chính và chọn ví dụ hoặc dẫn chứng gần gũi với chương trình Ngữ văn Lớp ${appState.grade}.\n` +
+        `2. Khung dàn ý gợi mở:\n` +
+        `   - Mở đầu: Giới thiệu vấn đề/đối tượng và nêu nhận định khái quát.\n` +
+        `   - Triển khai: Trình bày 2–3 ý chính theo trình tự rõ ràng, mỗi ý có dẫn chứng và nhận xét ngắn.\n` +
+        `   - Kết thúc: Khẳng định lại ý nghĩa hoặc rút ra bài học cho bản thân.\n` +
+        `• Lưu ý: Thầy/Cô sẽ không viết bài thay để em tự rèn câu chữ của mình. Em dự định viết ý đầu tiên như thế nào?`;
+    }
+
+    async function handleTutorSubmit(event) {
+      event.preventDefault();
+      const input = document.getElementById("tutor-input");
+      const btn = document.getElementById("tutor-send-btn");
+      const q = input.value.trim();
+      if (!q) return;
+
+      const box = document.getElementById("tutor-messages");
+      box.innerHTML += `
+        <div class="flex items-start justify-end gap-3">
+          <div class="bg-indigo-600 text-white p-4 rounded-2xl rounded-tr-none text-sm max-w-xl leading-relaxed">${escapeHTML(q)}</div>
+          <div class="w-9 h-9 rounded-2xl bg-slate-200 flex items-center justify-center text-slate-700 text-sm shrink-0"><i class="fa-solid fa-user-graduate"></i></div>
+        </div>
+      `;
+      input.value = "";
+
+      const loadId = "t-load-" + Date.now();
+      box.innerHTML += `
+        <div id="${loadId}" class="flex items-start gap-3">
+          <div class="w-9 h-9 rounded-2xl gradient-primary flex items-center justify-center text-white text-sm shrink-0"><i class="fa-solid fa-robot"></i></div>
+          <div class="bg-white px-4 py-3 rounded-2xl rounded-tl-none border border-indigo-100 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-indigo-500 typing-dot"></span>
+            <span class="w-2 h-2 rounded-full bg-sky-500 typing-dot"></span>
+            <span class="w-2 h-2 rounded-full bg-emerald-500 typing-dot"></span>
+          </div>
+        </div>
+      `;
+      box.scrollTop = box.scrollHeight;
+      btn.disabled = true;
+
+      const sysPrompt = `Bạn là Gia sư Ngữ văn THCS (Lớp ${appState.grade}). TUYỆT ĐỐI KHÔNG viết bài văn hay đoạn văn thay học sinh. Chỉ giải thích kiến thức, gợi ý cách tìm ý, lập dàn ý và đặt câu hỏi gợi mở để học sinh tự viết.`;
+
+      const reply = await askGeminiOrFallback({
+        prompt: `Học sinh lớp ${appState.grade} hỏi: ${q}`,
+        systemInstruction: sysPrompt,
+        fallbackFn: () => buildPedagogicalTutorFallback(q)
+      });
+
+      document.getElementById(loadId)?.remove();
+      box.innerHTML += `
+        <div class="flex items-start gap-3">
+          <div class="w-9 h-9 rounded-2xl gradient-primary flex items-center justify-center text-white text-sm shrink-0"><i class="fa-solid fa-robot"></i></div>
+          <div class="bg-white p-4 rounded-2xl rounded-tl-none border border-indigo-100 text-sm text-slate-700 max-w-2xl leading-relaxed whitespace-pre-line">${formatBold(reply)}</div>
+        </div>
+      `;
+      btn.disabled = false;
+      box.scrollTop = box.scrollHeight;
+    }
+
+    // =======================================================================
+    // 7. KHU VỰC 4: PHÒNG LUYỆN ĐỌC HIỂU
+    // =======================================================================
+    function getReadingListForGrade(g) {
+      const base = DEFAULT_READING_BY_GRADE[g] || DEFAULT_READING_BY_GRADE[6];
+      const extra = (appState.customReadingExercises || []).filter(x => Number(x.grade) === Number(g));
+      return [...extra, ...base];
+    }
+
+    function initReadingSection() {
+      const list = getReadingListForGrade(appState.grade);
+      const sel = document.getElementById("reading-select");
+      sel.innerHTML = list.map((item, idx) => `<option value="${idx}">${escapeHTML(item.title)}</option>`).join("");
+      loadReadingExercise();
+    }
+
+    function loadReadingExercise() {
+      const list = getReadingListForGrade(appState.grade);
+      const idx = Number(document.getElementById("reading-select").value) || 0;
+      const ex = list[idx] || list[0];
+
+      document.getElementById("reading-genre-badge").textContent = ex.genre;
+      document.getElementById("reading-title").textContent = ex.title;
+      document.getElementById("reading-passage").textContent = ex.passage;
+      document.getElementById("reading-source").textContent = ex.source || "Ngữ liệu Ngữ văn THCS";
+      document.getElementById("reading-result-box").classList.add("hidden");
+
+      const levelBadge = {
+        "Nhận biết": "bg-emerald-100 text-emerald-800",
+        "Thông hiểu": "bg-sky-100 text-sky-800",
+        "Vận dụng": "bg-purple-100 text-purple-800"
+      };
+
+      document.getElementById("reading-questions-container").innerHTML = ex.questions.map((q, qIdx) => {
+        if (q.type === "mcq") {
+          return `
+            <div class="bg-white rounded-3xl p-5 sm:p-6 border border-indigo-100 shadow-xs space-y-3">
+              <span class="px-3 py-1 rounded-full text-xs font-bold ${levelBadge[q.level] || 'bg-slate-100'}">${escapeHTML(q.level)}</span>
+              <p class="text-sm sm:text-base font-bold text-slate-800">${escapeHTML(q.q)}</p>
+              <div class="space-y-2">
+                ${q.opts.map((opt, oIdx) => `
+                  <label class="flex items-center gap-3 p-3 rounded-2xl border border-slate-200 hover:bg-indigo-50/50 cursor-pointer text-sm">
+                    <input type="radio" name="rq-${qIdx}" value="${oIdx}" class="text-indigo-600">
+                    <span>${escapeHTML(opt)}</span>
+                  </label>
+                `).join("")}
+              </div>
+              <div id="rexp-${qIdx}" class="hidden p-3.5 rounded-2xl text-xs sm:text-sm"></div>
+            </div>
+          `;
+        }
+        return `
+          <div class="bg-white rounded-3xl p-5 sm:p-6 border border-indigo-100 shadow-xs space-y-3">
+            <span class="px-3 py-1 rounded-full text-xs font-bold ${levelBadge[q.level] || 'bg-purple-100 text-purple-800'}">${escapeHTML(q.level)}</span>
+            <p class="text-sm sm:text-base font-bold text-slate-800">${escapeHTML(q.q)}</p>
+            <textarea id="ressay-${qIdx}" rows="3" placeholder="Viết câu trả lời vận dụng của em..." class="w-full p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white"></textarea>
+            <div id="rexp-${qIdx}" class="hidden p-3.5 rounded-2xl bg-indigo-50 border border-indigo-200 text-xs sm:text-sm text-indigo-950"></div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function submitReadingAnswers() {
+      const list = getReadingListForGrade(appState.grade);
+      const idx = Number(document.getElementById("reading-select").value) || 0;
+      const ex = list[idx] || list[0];
+
+      let mcqCount = 0;
+      let mcqRight = 0;
+      let essayOk = false;
+
+      ex.questions.forEach((q, qIdx) => {
+        const expEl = document.getElementById(`rexp-${qIdx}`);
+        expEl.classList.remove("hidden");
+
+        if (q.type === "mcq") {
+          mcqCount++;
+          const picked = document.querySelector(`input[name="rq-${qIdx}"]:checked`);
+          const val = picked ? Number(picked.value) : -1;
+          if (val === q.ans) {
+            mcqRight++;
+            expEl.className = "p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs sm:text-sm text-emerald-900";
+            expEl.innerHTML = `<strong>Đúng!</strong> ${escapeHTML(q.exp)}`;
+          } else {
+            expEl.className = "p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-xs sm:text-sm text-rose-900";
+            expEl.innerHTML = `<strong>Chưa đúng.</strong> Đáp án: <em>${escapeHTML(q.opts[q.ans])}</em>. ${escapeHTML(q.exp)}`;
+          }
+        } else {
+          const ansText = (document.getElementById(`ressay-${qIdx}`)?.value || "").trim();
+          if (ansText.length >= 12) essayOk = true;
+          expEl.innerHTML = `<strong>Gợi ý đáp án:</strong> ${escapeHTML(q.sampleAnswer)}`;
+        }
+      });
+
+      const totalSteps = ex.questions.length;
+      const achievedSteps = mcqRight + (essayOk ? 1 : 0);
+      const score10 = Number(((achievedSteps / totalSteps) * 10).toFixed(1));
+      const pts = mcqRight * 10 + (essayOk ? 10 : 0);
+
+      appState.points += pts;
+      appState.readingsDone += 1;
+      appState.scoreHistory.push({ label: `Đọc ${appState.grade}`, score: score10 });
+      if (appState.scoreHistory.length > 8) appState.scoreHistory.shift();
+      saveState();
+
+      document.getElementById("reading-result-box").classList.remove("hidden");
+      document.getElementById("reading-score-badge").textContent = `${score10}/10 (+${pts}đ)`;
+      document.getElementById("reading-feedback-text").textContent = `Em trả lời đúng ${mcqRight}/${mcqCount} câu trắc nghiệm${essayOk ? " và hoàn thành câu vận dụng" : ""}.`;
+      showToast(`Hoàn thành đọc hiểu (+${pts} điểm)!`, "success");
+    }
+
+    // =======================================================================
+    // 8. KHU VỰC 5: XƯỞNG VIẾT VĂN
+    // =======================================================================
+    let wTimer = null;
+    let wSec = 0;
+
+    function getWritingListForGrade(g) {
+      const base = DEFAULT_WRITING_BY_GRADE[g] || DEFAULT_WRITING_BY_GRADE[6];
+      const extra = (appState.customWritingPrompts || []).filter(x => Number(x.grade) === Number(g));
+      return [...extra, ...base];
+    }
+
+    function initWritingSection() {
+      const list = getWritingListForGrade(appState.grade);
+      const sel = document.getElementById("writing-prompt-select");
+      sel.innerHTML = list.map((p, idx) => `<option value="${idx}">[${escapeHTML(p.type)}] ${escapeHTML(p.prompt.slice(0, 52))}...</option>`).join("");
+      selectWritingPrompt();
+    }
+
+    function selectWritingPrompt() {
+      const list = getWritingListForGrade(appState.grade);
+      const idx = Number(document.getElementById("writing-prompt-select").value) || 0;
+      const p = list[idx] || list[0];
+
+      document.getElementById("writing-type-badge").textContent = p.type;
+      document.getElementById("writing-target-words").textContent = p.words || "~300 chữ";
+      document.getElementById("writing-prompt-text").textContent = p.prompt;
+      document.getElementById("writing-outline-box").innerHTML = (p.outline || []).map(line => `
+        <div class="p-3 rounded-2xl bg-emerald-50/70 border border-emerald-100 leading-relaxed">${escapeHTML(line)}</div>
+      `).join("");
+    }
+
+    function updateWritingStats() {
+      const txt = document.getElementById("writing-editor").value.trim();
+      const words = txt ? txt.split(/\s+/).length : 0;
+      const sents = txt ? txt.split(/[.!?]+/).filter(s => s.trim().length > 0).length : 0;
+      document.getElementById("writing-word-count").textContent = words;
+      document.getElementById("writing-sentence-count").textContent = sents;
+    }
+
+    function toggleWritingTimer() {
+      const btn = document.getElementById("writing-timer-btn");
+      if (wTimer) {
+        clearInterval(wTimer);
+        wTimer = null;
+        btn.textContent = "Tiếp tục";
+      } else {
+        btn.textContent = "Tạm dừng";
+        wTimer = setInterval(() => {
+          wSec++;
+          const mm = String(Math.floor(wSec / 60)).padStart(2, "0");
+          const ss = String(wSec % 60).padStart(2, "0");
+          document.getElementById("writing-timer").textContent = `${mm}:${ss}`;
+        }, 1000);
+      }
+    }
+
+    function resetWritingTimer() {
+      clearInterval(wTimer);
+      wTimer = null;
+      wSec = 0;
+      document.getElementById("writing-timer").textContent = "00:00";
+      document.getElementById("writing-timer-btn").textContent = "Bắt đầu";
+    }
+
+    function saveWritingDraft() {
+      localStorage.setItem("hanhTrinhWritingDraft", document.getElementById("writing-editor").value);
+      showToast("Đã lưu nháp bài viết!", "success");
+    }
+
+    function clearWritingEditor() {
+      document.getElementById("writing-editor").value = "";
+      updateWritingStats();
+    }
+
+    function sendWritingToEvaluator() {
+      const topic = document.getElementById("writing-prompt-text").textContent;
+      const content = document.getElementById("writing-editor").value.trim();
+      if (content.length < 25) {
+        showToast("Em hãy viết thêm nội dung bài làm trước khi chuyển sang AI chấm nhé!", "warning");
+        return;
+      }
+      document.getElementById("evaluator-topic").value = topic;
+      document.getElementById("evaluator-content").value = content;
+      switchTab("evaluator");
+      showToast("Đã chuyển bài viết sang AI Đánh giá!", "info");
+    }
+
+    // =======================================================================
+    // 9. KHU VỰC 6: AI ĐÁNH GIÁ BÀI VIẾT
+    // =======================================================================
+    function handleEvaluatorFileUpload(event) {
+      const file = event.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        document.getElementById("evaluator-content").value = e.target.result || "";
+        showToast(`Đã tải bài làm từ "${file.name}"`, "success");
+      };
+      reader.readAsText(file, "UTF-8");
+    }
+
+    function fillSampleEssay() {
+      document.getElementById("evaluator-topic").value = "Viết đoạn văn nêu cảm xúc về vẻ đẹp thiên nhiên và tình yêu quê hương.";
+      document.getElementById("evaluator-content").value =
+        "Mỗi khi mùa thu ghé qua, con đường làng em như khoác lên tấm áo vàng óng ánh của nắng nhẹ và sắc lá rụng. Tiếng gió khẽ thổi qua hàng tre xanh rì rào bản nhạc êm ái, khiến lòng em thấy bình yên đến lạ. Giữa nhịp sống bận rộn, những khoảnh khắc giản dị ấy giúp em càng thêm yêu quý và trân trọng mảnh đất nơi mình lớn lên.";
+      showToast("Đã nạp bài văn mẫu.", "info");
+    }
+
+    function buildLocalRubricEvaluation(content) {
+      const wordCount = content.trim().split(/\s+/).length;
+      const hasRichImg = /như|lung linh|dịu|xanh|rực rỡ|bình yên|xao xuyến|tự hào/i.test(content);
+      const c1 = wordCount >= 60 ? 3.2 : 2.7;
+      const c2 = wordCount >= 45 ? 2.2 : 1.8;
+      const c3 = hasRichImg ? 2.2 : 1.8;
+      const c4 = hasRichImg ? 1.3 : 1.0;
+      const total = Number((c1 + c2 + c3 + c4).toFixed(1));
+      const rank = total >= 8.5 ? "Giỏi" : total >= 7.0 ? "Khá" : "Đạt";
+
+      return JSON.stringify({
+        c1, c2, c3, c4, total, rank,
+        strengths: [
+          "Bài viết bám sát yêu cầu đề và bộc lộ được cảm xúc chân thành.",
+          wordCount >= 50 ? "Độ dài phù hợp, ý triển khai tương đối mạch lạc." : "Diễn đạt bước đầu rõ ràng, dễ hiểu."
+        ],
+        improvements: [
+          "Chú ý kiểm tra dấu câu, lỗi lặp từ và liên kết giữa các câu.",
+          "Bổ sung thêm 1–2 hình ảnh cụ thể hoặc biện pháp tu từ để đoạn văn sinh động hơn."
+        ],
+        upgrade: "Em có thể nâng cấp câu văn theo hướng gợi hình hơn, ví dụ: 'Ánh nắng mùa thu dịu dàng rót mật lên từng tán lá, đánh thức những rung cảm ấm áp nhất trong lòng người đọc.'"
+      });
+    }
+
+    async function evaluateEssayWithAI() {
+      const topic = document.getElementById("evaluator-topic").value.trim() || "Bài viết Ngữ văn THCS";
+      const content = document.getElementById("evaluator-content").value.trim();
+
+      if (content.length < 25) {
+        showToast("Vui lòng nhập bài viết tối thiểu 25 kí tự để đánh giá.", "warning");
+        return;
+      }
+
+      const btn = document.getElementById("evaluate-submit-btn");
+      document.getElementById("evaluator-placeholder").classList.add("hidden");
+      document.getElementById("evaluator-result").classList.add("hidden");
+      document.getElementById("evaluator-loading").classList.remove("hidden");
+      btn.disabled = true;
+
+      const schema = {
+        type: "OBJECT",
+        properties: {
+          c1: { type: "NUMBER" },
+          c2: { type: "NUMBER" },
+          c3: { type: "NUMBER" },
+          c4: { type: "NUMBER" },
+          total: { type: "NUMBER" },
+          rank: { type: "STRING" },
+          strengths: { type: "ARRAY", items: { type: "STRING" } },
+          improvements: { type: "ARRAY", items: { type: "STRING" } },
+          upgrade: { type: "STRING" }
+        },
+        required: ["c1", "c2", "c3", "c4", "total", "rank", "strengths", "improvements", "upgrade"]
+      };
+
+      const raw = await askGeminiOrFallback({
+        prompt: `Chấm bài Ngữ văn Lớp ${appState.grade}. Đề: ${topic}\nBài làm:\n${content}`,
+        systemInstruction: "Chấm thang 10 theo 4 tiêu chí: c1 (tối đa 3.5), c2 (tối đa 2.5), c3 (tối đa 2.5), c4 (tối đa 1.5), total (tối đa 10), rank, strengths, improvements, upgrade.",
+        schema,
+        fallbackFn: () => buildLocalRubricEvaluation(content)
+      });
+
+      try {
+        const res = JSON.parse(raw);
+        const c1 = Math.min(3.5, Math.max(0, Number(res.c1) || 2.5));
+        const c2 = Math.min(2.5, Math.max(0, Number(res.c2) || 1.8));
+        const c3 = Math.min(2.5, Math.max(0, Number(res.c3) || 1.8));
+        const c4 = Math.min(1.5, Math.max(0, Number(res.c4) || 1.0));
+        const total = Number((Math.min(10, Math.max(0, Number(res.total) || (c1 + c2 + c3 + c4)))).toFixed(1));
+
+        document.getElementById("eval-total-score").textContent = total.toFixed(1);
+        document.getElementById("eval-rank-label").textContent = `Xếp loại: ${res.rank || "Tốt"}`;
+
+        document.getElementById("eval-c1").textContent = `${c1.toFixed(1)}/3.5`;
+        document.getElementById("eval-b1").style.width = `${(c1 / 3.5) * 100}%`;
+
+        document.getElementById("eval-c2").textContent = `${c2.toFixed(1)}/2.5`;
+        document.getElementById("eval-b2").style.width = `${(c2 / 2.5) * 100}%`;
+
+        document.getElementById("eval-c3").textContent = `${c3.toFixed(1)}/2.5`;
+        document.getElementById("eval-b3").style.width = `${(c3 / 2.5) * 100}%`;
+
+        document.getElementById("eval-c4").textContent = `${c4.toFixed(1)}/1.5`;
+        document.getElementById("eval-b4").style.width = `${(c4 / 1.5) * 100}%`;
+
+        document.getElementById("eval-strengths").innerHTML = (res.strengths || []).map(s => `<li>${escapeHTML(s)}</li>`).join("");
+        document.getElementById("eval-improvements").innerHTML = (res.improvements || []).map(s => `<li>${escapeHTML(s)}</li>`).join("");
+        document.getElementById("eval-upgrade").textContent = res.upgrade || "";
+
+        const gained = Math.round(total * 4);
+        appState.points += gained;
+        appState.essaysEvaluated += 1;
+        appState.scoreHistory.push({ label: `Văn ${appState.essaysEvaluated}`, score: total });
+        if (appState.scoreHistory.length > 8) appState.scoreHistory.shift();
+        saveState();
+
+        document.getElementById("evaluator-loading").classList.add("hidden");
+        document.getElementById("evaluator-result").classList.remove("hidden");
+        showToast(`Đã đánh giá bài viết: ${total.toFixed(1)} điểm (+${gained}đ)!`, "success");
+      } catch (e) {
+        document.getElementById("evaluator-loading").classList.add("hidden");
+        document.getElementById("evaluator-placeholder").classList.remove("hidden");
+        showToast("Có lỗi khi đọc kết quả đánh giá.", "error");
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    // =======================================================================
+    // 10. KHU VỰC 7: ĐẤU TRƯỜNG TRI THỨC (15 GIÂY/CÂU + COMBO)
+    // =======================================================================
+    let arena = {
+      items: [], idx: 0, score: 0, right: 0, combo: 0, maxCombo: 0, sec: 15, timer: null, locked: false
+    };
+
+    function resetArena() {
+      clearInterval(arena.timer);
+      document.getElementById("arena-start-screen").classList.remove("hidden");
+      document.getElementById("arena-play-screen").classList.add("hidden");
+      document.getElementById("arena-end-screen").classList.add("hidden");
+    }
+
+    function startArenaGame() {
+      const bank = [...(ARENA_BANK[appState.grade] || ARENA_BANK[6])];
+      for (let i = bank.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [bank[i], bank[j]] = [bank[j], bank[i]];
+      }
+      arena = { items: bank, idx: 0, score: 0, right: 0, combo: 0, maxCombo: 0, sec: 15, timer: null, locked: false };
+      document.getElementById("arena-start-screen").classList.add("hidden");
+      document.getElementById("arena-end-screen").classList.add("hidden");
+      document.getElementById("arena-play-screen").classList.remove("hidden");
+      renderArenaQ();
+    }
+
+    function renderArenaQ() {
+      clearInterval(arena.timer);
+      arena.locked = false;
+      arena.sec = 15;
+      const q = arena.items[arena.idx];
+
+      document.getElementById("arena-q-index").textContent = arena.idx + 1;
+      document.getElementById("arena-combo").textContent = arena.combo;
+      document.getElementById("arena-score").textContent = arena.score;
+      document.getElementById("arena-timer").textContent = arena.sec;
+      document.getElementById("arena-category-tag").textContent = `${q.cat} • Lớp ${appState.grade}`;
+      document.getElementById("arena-question-text").textContent = q.q;
+      document.getElementById("arena-feedback-banner").classList.add("hidden");
+
+      const abcd = ["A", "B", "C", "D"];
+      document.getElementById("arena-options").innerHTML = q.opts.map((opt, i) => `
+        <button id="aopt-${i}" onclick="pickArenaAns(${i})" class="btn-pill w-full text-left p-4 border-2 border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/50 text-sm sm:text-base font-semibold text-slate-700 flex items-center gap-3">
+          <span class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 font-extrabold text-xs flex items-center justify-center shrink-0">${abcd[i]}</span>
+          <span>${escapeHTML(opt)}</span>
+        </button>
+      `).join("");
+
+      arena.timer = setInterval(() => {
+        arena.sec--;
+        document.getElementById("arena-timer").textContent = arena.sec;
+        if (arena.sec <= 0) {
+          clearInterval(arena.timer);
+          pickArenaAns(-1);
+        }
+      }, 1000);
+    }
+
+    function pickArenaAns(choice) {
+      if (arena.locked) return;
+      arena.locked = true;
+      clearInterval(arena.timer);
+
+      const q = arena.items[arena.idx];
+      const banner = document.getElementById("arena-feedback-banner");
+      banner.classList.remove("hidden");
+
+      q.opts.forEach((_, i) => {
+        const b = document.getElementById(`aopt-${i}`);
+        b.disabled = true;
+        if (i === q.ans) b.classList.add("border-emerald-500", "bg-emerald-50", "text-emerald-900");
+        else if (i === choice) b.classList.add("border-rose-500", "bg-rose-50", "text-rose-900");
+      });
+
+      if (choice === q.ans) {
+        arena.combo++;
+        arena.maxCombo = Math.max(arena.maxCombo, arena.combo);
+        arena.right++;
+        const add = 10 + (arena.combo - 1) * 5;
+        arena.score += add;
+        banner.className = "p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-sm font-bold";
+        banner.textContent = `Chính xác! +${add} điểm (Combo x${arena.combo})`;
+      } else {
+        arena.combo = 0;
+        banner.className = "p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-900 text-sm font-bold";
+        banner.textContent = choice === -1 ? `Hết giờ! Đáp án: ${q.opts[q.ans]}` : `Chưa đúng! Đáp án: ${q.opts[q.ans]}`;
+      }
+
+      document.getElementById("arena-score").textContent = arena.score;
+      document.getElementById("arena-combo").textContent = arena.combo;
+
+      setTimeout(() => {
+        arena.idx++;
+        if (arena.idx < arena.items.length) renderArenaQ();
+        else endArenaGame();
+      }, 1400);
+    }
+
+    function endArenaGame() {
+      document.getElementById("arena-play-screen").classList.add("hidden");
+      document.getElementById("arena-end-screen").classList.remove("hidden");
+      document.getElementById("arena-final-score").textContent = arena.score;
+      document.getElementById("arena-final-correct").textContent = `${arena.right}/${arena.items.length}`;
+      document.getElementById("arena-final-combo").textContent = `x${arena.maxCombo}`;
+      document.getElementById("arena-summary-text").textContent = `Em đạt ${arena.score} điểm và đúng ${arena.right}/${arena.items.length} câu!`;
+
+      appState.points += arena.score;
+      appState.arenaPlayed += 1;
+      saveState();
+    }
+
+    // =======================================================================
+    // 11. KHU VỰC 8: THỬ THÁCH SÁNG TẠO
+    // =======================================================================
+    let creativeIdx = 0;
+
+    function pickRandomCreativeChallenge() {
+      creativeIdx = (creativeIdx + 1) % CREATIVE_LIST.length;
+      renderCreativeChallenge();
+    }
+
+    function renderCreativeChallenge() {
+      const c = CREATIVE_LIST[creativeIdx];
+      document.getElementById("creative-tag").textContent = c.tag;
+      document.getElementById("creative-title").textContent = c.title;
+      document.getElementById("creative-desc").textContent = c.desc;
+      document.getElementById("creative-ai-feedback").classList.add("hidden");
+    }
+
+    function saveCreativeWork() {
+      const title = document.getElementById("creative-work-title").value.trim() || "Tác phẩm của em";
+      const content = document.getElementById("creative-work-body").value.trim();
+      const tag = document.getElementById("creative-tag").textContent;
+      if (content.length < 10) {
+        showToast("Em hãy viết thêm nội dung sáng tác trước khi lưu nhé!", "warning");
+        return;
+      }
+
+      appState.creativeWorks.unshift({
+        id: Date.now(),
+        title,
+        tag,
+        content,
+        date: new Date().toLocaleDateString("vi-VN")
+      });
+      appState.creativeCount += 1;
+      appState.points += 15;
+      saveState();
+
+      document.getElementById("creative-work-title").value = "";
+      document.getElementById("creative-work-body").value = "";
+      renderCreativeGallery();
+      showToast("Đã lưu vào Góc tác phẩm (+15 điểm)!", "success");
+    }
+
+    function renderCreativeGallery() {
+      const works = appState.creativeWorks || [];
+      document.getElementById("creative-count-badge").textContent = `${works.length} tác phẩm`;
+      document.getElementById("creative-gallery").innerHTML = works.map(w => `
+        <div class="p-4 rounded-2xl bg-purple-50/50 border border-purple-100 space-y-1">
+          <div class="flex justify-between text-xs">
+            <span class="font-bold text-purple-700">${escapeHTML(w.tag)}</span>
+            <span class="text-slate-400">${escapeHTML(w.date)}</span>
+          </div>
+          <h4 class="font-extrabold text-sm text-slate-800">${escapeHTML(w.title)}</h4>
+          <p class="text-xs text-slate-600 whitespace-pre-line literary-text">${escapeHTML(w.content)}</p>
+        </div>
+      `).join("");
+    }
+
+    async function getCreativeFeedbackAI() {
+      const title = document.getElementById("creative-work-title").value.trim() || "Tác phẩm sáng tạo";
+      const content = document.getElementById("creative-work-body").value.trim();
+      if (content.length < 10) {
+        showToast("Vui lòng viết tác phẩm trước khi nhận phản hồi từ AI.", "warning");
+        return;
+      }
+      const btn = document.getElementById("creative-ai-btn");
+      const box = document.getElementById("creative-ai-feedback");
+      btn.disabled = true;
+      box.classList.remove("hidden");
+      box.textContent = "AI đang đọc và gửi lời khích lệ...";
+
+      const reply = await askGeminiOrFallback({
+        prompt: `Nhận xét khích lệ sáng tác của học sinh lớp ${appState.grade}. Nhan đề: ${title}\nNội dung:\n${content}`,
+        systemInstruction: "Gửi lời khen ấm áp, chỉ ra nét đẹp cảm xúc và gợi ý nhỏ cho học sinh THCS.",
+        fallbackFn: () => `Tác phẩm "${title}" thể hiện sự cố gắng và cảm xúc hồn nhiên của em. Những hình ảnh em chọn gợi được nét riêng đáng trân trọng. Em có thể thử thêm một vài từ ngữ gợi tả sắc màu hoặc âm thanh để tác phẩm thêm sinh động nhé!`
+      });
+
+      box.innerHTML = `<strong><i class="fa-solid fa-heart text-rose-500 mr-1"></i>Phản hồi AI:</strong> ${formatBold(reply)}`;
+      btn.disabled = false;
+    }
+
+    // =======================================================================
+    // 12. KHU VỰC 9: BẢNG THÀNH TÍCH
+    // =======================================================================
+    function getRank(pts) {
+      if (pts >= 220) return { name: "Sứ giả tri thức", target: 300, pct: 100 };
+      if (pts >= 100) return { name: "Nhà văn nhí", target: 220, pct: Math.round(((pts - 100) / 120) * 100) };
+      return { name: "Người gieo chữ", target: 100, pct: Math.min(100, Math.round((pts / 100) * 100)) };
+    }
+
+    function refreshStatsUI() {
+      const r = getRank(appState.points);
+      document.getElementById("nav-points").textContent = appState.points;
+      document.getElementById("home-stat-points").textContent = appState.points;
+      document.getElementById("home-stat-readings").textContent = appState.readingsDone;
+      document.getElementById("home-stat-essays").textContent = appState.essaysEvaluated;
+      document.getElementById("home-stat-rank").textContent = r.name;
+
+      document.getElementById("ach-rank-name").textContent = r.name;
+      document.getElementById("ach-total-points").textContent = appState.points;
+      document.getElementById("ach-next-rank-label").textContent = `${appState.points} / ${r.target}`;
+      document.getElementById("ach-rank-bar").style.width = `${Math.max(8, r.pct)}%`;
+
+      document.getElementById("ach-readings-count").textContent = appState.readingsDone;
+      document.getElementById("ach-essays-count").textContent = appState.essaysEvaluated;
+      document.getElementById("ach-arena-count").textContent = appState.arenaPlayed;
+      document.getElementById("ach-creative-count").textContent = appState.creativeCount;
+
+      // Biểu đồ cột
+      document.getElementById("ach-chart-container").innerHTML = (appState.scoreHistory || []).map(item => {
+        const h = Math.max(15, Math.min(100, (item.score / 10) * 100));
+        return `
+          <div class="flex flex-col items-center justify-end h-full flex-1 gap-1">
+            <span class="text-xs font-extrabold text-indigo-700">${Number(item.score).toFixed(1)}</span>
+            <div class="w-full max-w-[34px] rounded-t-xl gradient-primary transition-all duration-500" style="height:${h}%"></div>
+            <span class="text-[10px] font-semibold text-slate-500 truncate max-w-[56px]">${escapeHTML(item.label)}</span>
+          </div>
+        `;
+      }).join("");
+
+      // Huy hiệu
+      document.getElementById("ach-badges-grid").innerHTML = BADGES.map(b => {
+        const on = b.ok(appState);
+        return `
+          <div class="p-3.5 rounded-2xl border text-center space-y-1 ${on ? 'bg-indigo-50/60 border-indigo-200' : 'bg-slate-50 border-slate-200/60 opacity-55 grayscale'}">
+            <div class="w-10 h-10 mx-auto rounded-2xl ${on ? 'gradient-primary text-white' : 'bg-slate-200 text-slate-500'} flex items-center justify-center">
+              <i class="fa-solid ${b.icon}"></i>
+            </div>
+            <p class="text-xs font-extrabold text-slate-800">${escapeHTML(b.title)}</p>
+            <p class="text-[10px] text-slate-500">${escapeHTML(b.desc)}</p>
+          </div>
+        `;
+      }).join("");
+
+      renderTeacherTable();
+    }
+
+    // =======================================================================
+    // 13. KHU VỰC 10: GÓC GIÁO VIÊN (GIAO ĐỀ, XEM KẾT QUẢ, XUẤT CSV/IN)
+    // =======================================================================
+    function toggleTeacherModuleFields() {
+      const mod = document.getElementById("teacher-target-module").value;
+      document.getElementById("teacher-writing-fields").classList.toggle("hidden", mod !== "writing");
+      document.getElementById("teacher-reading-fields").classList.toggle("hidden", mod !== "reading");
+    }
+
+    async function handleTeacherCreateAssignment(event) {
+      event.preventDefault();
+      const grade = Number(document.getElementById("teacher-new-grade").value);
+      const mod = document.getElementById("teacher-target-module").value;
+
+      if (mod === "writing") {
+        const type = document.getElementById("teacher-new-type").value.trim() || "Tự luận";
+        const prompt = document.getElementById("teacher-new-prompt").value.trim();
+        const rubric = document.getElementById("teacher-new-rubric").value.trim();
+        if (!prompt) {
+          showToast("Vui lòng nhập đề bài.", "warning");
+          return;
+        }
+        const newItem = {
+          id: "gw-" + Date.now(),
+          grade,
+          type: `[GV] ${type}`,
+          words: "Theo yêu cầu GV",
+          prompt,
+          outline: rubric ? rubric.split("\n").map(x => x.trim()).filter(Boolean) : ["Mở bài – Thân bài – Kết bài theo yêu cầu đề."]
+        };
+        appState.customWritingPrompts.unshift(newItem);
+        if (window.CloudStore && window.CloudStore.db) {
+          await window.CloudStore.saveAssignment("de_luyen_viet", newItem);
+        }
+        saveState();
+        if (appState.grade === grade) initWritingSection();
+        showToast(`Đã giao đề viết sang Lớp ${grade}!`, "success");
+      } else {
+        const title = document.getElementById("teacher-read-title").value.trim() || "Ngữ liệu đọc hiểu mới";
+        const passage = document.getElementById("teacher-read-passage").value.trim();
+        const qText = document.getElementById("teacher-read-question").value.trim() || "Nêu nội dung chính của ngữ liệu.";
+        if (!passage) {
+          showToast("Vui lòng nhập ngữ liệu đọc hiểu.", "warning");
+          return;
+        }
+        const newRead = {
+          id: "gr-" + Date.now(),
+          grade,
+          title: `[GV] ${title}`,
+          genre: "Văn bản giao thêm",
+          passage,
+          source: `Năm học ${appState.schoolYear}`,
+          questions: [
+            { level: "Vận dụng", type: "essay", q: qText, sampleAnswer: "Trình bày rõ ràng, bám sát ngữ liệu và liên hệ thực tế." }
+          ]
+        };
+        appState.customReadingExercises.unshift(newRead);
+        if (window.CloudStore && window.CloudStore.db) {
+          await window.CloudStore.saveAssignment("bai_doc_hieu", newRead);
+        }
+        saveState();
+        if (appState.grade === grade) initReadingSection();
+        showToast(`Đã giao bài đọc hiểu sang Lớp ${grade}!`, "success");
+      }
+
+      event.target.reset();
+      toggleTeacherModuleFields();
+    }
+
+    function getStudentReportRows() {
+      const avg = appState.scoreHistory.length
+        ? (appState.scoreHistory.reduce((a, b) => a + Number(b.score), 0) / appState.scoreHistory.length).toFixed(1)
+        : "7.5";
+      const done = appState.readingsDone + appState.essaysEvaluated + appState.arenaPlayed;
+      const rank = Number(avg) >= 8.0 ? "Tốt" : "Khá";
+
+      return [
+        { name: "Học sinh hiện tại", grade: `Lớp ${appState.grade}`, done: `${done} bài`, avg, rank, mine: true },
+        { name: "Nguyễn Khánh Linh", grade: "Lớp 6", done: "10 bài", avg: "8.6", rank: "Tốt" },
+        { name: "Đỗ Minh Quân", grade: "Lớp 7", done: "8 bài", avg: "7.8", rank: "Khá" },
+        { name: "Vũ Bảo Trâm", grade: "Lớp 8", done: "12 bài", avg: "9.0", rank: "Tốt" },
+        { name: "Hoàng Đức Anh", grade: "Lớp 9", done: "9 bài", avg: "8.2", rank: "Tốt" }
+      ];
+    }
+
+    function renderTeacherTable() {
+      const tbody = document.getElementById("teacher-students-tbody");
+      if (!tbody) return;
+      tbody.innerHTML = getStudentReportRows().map(r => `
+        <tr class="${r.mine ? 'bg-indigo-50/70 font-semibold' : 'hover:bg-slate-50'}">
+          <td class="py-3 px-3 text-slate-800">${escapeHTML(r.name)}</td>
+          <td class="py-3 px-3 text-slate-600">${escapeHTML(r.grade)}</td>
+          <td class="py-3 px-3 text-slate-600">${escapeHTML(r.done)}</td>
+          <td class="py-3 px-3 font-extrabold text-indigo-700">${escapeHTML(r.avg)}</td>
+          <td class="py-3 px-3"><span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">${escapeHTML(r.rank)}</span></td>
+        </tr>
+      `).join("");
+    }
+
+    function exportTeacherCSV() {
+      const rows = getStudentReportRows();
+      const lines = [
+        "\uFEFFHọ tên học sinh,Khối lớp,Số bài hoàn thành,Điểm trung bình,Xếp loại",
+        ...rows.map(r => `"${r.name}","${r.grade}","${r.done}","${r.avg}","${r.rank}"`)
+      ];
+      const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `Bao_cao_Ngu_Van_${appState.schoolYear || "2026-2027"}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast("Đã tải tệp báo cáo CSV/Excel!", "success");
+    }
+
+    // =======================================================================
+    // 14. TIỆN ÍCH & KHỞI TẠO
+    // =======================================================================
+    function escapeHTML(str) {
+      return String(str ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function formatBold(str) {
+      return escapeHTML(str).replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+    }
+
+   window.addEventListener("DOMContentLoaded", async () => {
+      const draft = localStorage.getItem("hanhTrinhWritingDraft");
+      if (draft) {
+        document.getElementById("writing-editor").value = draft;
+        updateWritingStats();
+      }
+
+      if (appState.firebaseConfigText) {
+        try {
+          const normalized = appState.firebaseConfigText
+            .replace(/^\s*(const|let|var)?\s*firebaseConfig\s*=\s*/i, "")
+            .replace(/;\s*$/, "")
+            .replace(/(\w+)\s*:/g, '"$1":')
+            .replace(/'/g, '"');
+          const cfg = JSON.parse(normalized);
+          const ok = await window.CloudStore.init(cfg, appState.schoolYear);
+          if (ok) await syncFromFirestore();
+        } catch (e) {}
+      }
+
+      updateSchoolYearUI();
+      updateRoleUI();
+      updateTutorModeUI();
+      clearTutorChat();
+      renderCreativeChallenge();
+      renderCreativeGallery();
+      setGrade(appState.grade || 6, true);
+      refreshStatsUI();
+      switchTab("home");
+    });
+  </script>
+</body>
+</html>
